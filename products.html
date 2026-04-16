@@ -41,14 +41,16 @@ h1 span{color:var(--accent-light);}
 .filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent-light);background:rgba(59,130,246,0.08);}
 
 /* GRID */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;padding:0 24px 60px;max-width:1400px;margin:0 auto;position:relative;z-index:1;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:0 24px 60px;max-width:1400px;margin:0 auto;position:relative;z-index:1;}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.grid{grid-template-columns:1fr;}}
 
 /* CARD */
 .card{background:linear-gradient(135deg,rgba(255,255,255,0.04) 0%,rgba(255,255,255,0.02) 100%);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s,box-shadow .2s,transform .15s;cursor:pointer;position:relative;}
 .card:hover{border-color:var(--border-accent);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.05) inset;transform:translateY(-2px);}
 .card.expanded{border-color:var(--border-accent);box-shadow:0 8px 32px rgba(0,0,0,0.4);}
-.card-thumb{height:160px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.card-thumb-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;}
+.card-thumb{height:180px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.card-thumb-inner{width:100%;height:100%;position:relative;}
 .quick-win-badge{position:absolute;top:10px;right:10px;background:rgba(16,185,129,0.9);color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;padding:3px 8px;border-radius:12px;text-transform:uppercase;}
 .card-body{padding:16px;}
 .card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
@@ -848,6 +850,311 @@ const CATEGORY_COLORS = {
   "AI & Digital Tools":"#06b6d4"
 };
 
+// ── SVG MOCKUP GENERATORS ──────────────────────────────────────────────────
+function svgWrap(content) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180" width="100%" height="100%" style="position:absolute;inset:0;display:block;">${content}</svg>`;
+}
+function mockupPlanner(c) {
+  const days=['M','T','W','T','F','S','S'];
+  const dw=34,sx=22,sy=28;
+  let cols=days.map((d,i)=>{const x=sx+i*dw;return`<rect x="${x}" y="${sy}" width="${dw-2}" height="140" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/><text x="${x+dw/2-1}" y="${sy+12}" text-anchor="middle" font-family="system-ui" font-size="7" font-weight="600" fill="${c}" opacity="0.85">${d}</text>`;}).join('');
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="12" y="8" width="274" height="162" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+    <rect x="12" y="8" width="274" height="18" rx="4" fill="${c}" opacity="0.12"/>
+    <text x="150" y="20" text-anchor="middle" font-family="system-ui" font-size="7" font-weight="700" letter-spacing="2" fill="${c}" opacity="0.9">WEEKLY PLANNER</text>
+    ${cols}
+    <rect x="24" y="50" width="30" height="12" rx="2" fill="${c}" opacity="0.55"/>
+    <rect x="58" y="44" width="30" height="18" rx="2" fill="${c}" opacity="0.35"/>
+    <rect x="92" y="52" width="30" height="10" rx="2" fill="${c}" opacity="0.45"/>
+    <rect x="126" y="47" width="30" height="15" rx="2" fill="${c}" opacity="0.5"/>
+    <rect x="160" y="54" width="30" height="8" rx="2" fill="${c}" opacity="0.3"/>
+    <rect x="194" y="46" width="30" height="20" rx="2" fill="${c}" opacity="0.4"/>
+    <rect x="228" y="52" width="30" height="12" rx="2" fill="${c}" opacity="0.25"/>
+    <rect x="24" y="76" width="64" height="7" rx="2" fill="${c}" opacity="0.2"/>
+    <rect x="92" y="78" width="32" height="5" rx="2" fill="${c}" opacity="0.18"/>
+    <rect x="160" y="75" width="62" height="8" rx="2" fill="${c}" opacity="0.22"/>
+    <line x1="12" y1="70" x2="286" y2="70" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+    <line x1="12" y1="95" x2="286" y2="95" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+    <line x1="12" y1="120" x2="286" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+    <line x1="12" y1="145" x2="286" y2="145" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+    <rect x="24" y="100" width="50" height="14" rx="2" fill="${c}" opacity="0.3"/>
+    <rect x="126" y="98" width="32" height="18" rx="2" fill="${c}" opacity="0.38"/>
+    <rect x="228" y="102" width="30" height="10" rx="2" fill="${c}" opacity="0.28"/>`);
+}
+function mockupSpreadsheet(c) {
+  const hdr=['','Jan','Feb','Mar','Total'];
+  const rows=[['Revenue','12,450','14,200','16,800','43,450'],['Expenses','8,200','9,100','9,800','27,100'],['Profit','4,250','5,100','7,000','16,350'],['Margin','34%','36%','42%','37%']];
+  const cx=[10,60,115,170,225];
+  let h=hdr.map((t,i)=>`<text x="${12+cx[i]+4}" y="38" font-family="system-ui" font-size="6" font-weight="700" fill="${c}" opacity="0.85">${t}</text>`).join('');
+  let r=rows.map((row,ri)=>{const y=44+ri*16;const bg=ri%2===0?'rgba(255,255,255,0.025)':'transparent';return`<rect x="12" y="${y}" width="276" height="16" fill="${bg}"/>`+row.map((cell,ci)=>`<text x="${12+cx[ci]+4}" y="${y+11}" text-anchor="${ci>0?'end':'start'}" font-family="system-ui" font-size="6" fill="${ci===4?c:'rgba(255,255,255,0.65)'}" font-weight="${ci===4?'700':'400'}">${cell}</text>`).join('');}).join('');
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="12" y="8" width="276" height="164" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+    <rect x="12" y="8" width="276" height="18" rx="4" fill="rgba(255,255,255,0.05)"/>
+    <rect x="16" y="11" width="22" height="12" rx="2" fill="${c}" opacity="0.2"/>
+    <text x="27" y="20" text-anchor="middle" font-family="monospace" font-size="6" fill="${c}" opacity="0.8">A1</text>
+    <text x="44" y="20" font-family="monospace" font-size="6" fill="rgba(255,255,255,0.4)">=SUM(B2:D5)</text>
+    <rect x="12" y="28" width="276" height="14" fill="${c}" opacity="0.18"/>
+    ${h}${r}
+    <rect x="20" y="113" width="256" height="52" rx="3" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+    <text x="148" y="124" text-anchor="middle" font-family="system-ui" font-size="6" fill="rgba(255,255,255,0.35)">Monthly Trend</text>
+    <rect x="36" y="154" width="44" height="7" rx="1" fill="${c}" opacity="0.4"/>
+    <rect x="96" y="146" width="44" height="15" rx="1" fill="${c}" opacity="0.55"/>
+    <rect x="156" y="136" width="44" height="25" rx="1" fill="${c}" opacity="0.7"/>
+    <line x1="26" y1="161" x2="270" y2="161" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>`);
+}
+function mockupNotion(c) {
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="10" y="8" width="280" height="164" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+    <rect x="10" y="8" width="62" height="164" rx="4" fill="rgba(255,255,255,0.025)"/>
+    <rect x="16" y="18" width="46" height="8" rx="2" fill="${c}" opacity="0.28"/>
+    <rect x="16" y="30" width="38" height="6" rx="2" fill="rgba(255,255,255,0.1)"/>
+    <rect x="16" y="40" width="42" height="6" rx="2" fill="rgba(255,255,255,0.07)"/>
+    <rect x="16" y="50" width="34" height="6" rx="2" fill="rgba(255,255,255,0.07)"/>
+    <rect x="16" y="60" width="40" height="6" rx="2" fill="${c}" opacity="0.12"/>
+    <rect x="16" y="70" width="32" height="6" rx="2" fill="rgba(255,255,255,0.05)"/>
+    <rect x="16" y="80" width="44" height="6" rx="2" fill="rgba(255,255,255,0.05)"/>
+    <rect x="82" y="16" width="120" height="11" rx="2" fill="rgba(255,255,255,0.18)"/>
+    <line x1="80" y1="34" x2="284" y2="34" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+    <rect x="80" y="40" width="88" height="7" rx="2" fill="${c}" opacity="0.22"/>
+    <rect x="80" y="52" width="192" height="5" rx="1" fill="rgba(255,255,255,0.1)"/>
+    <rect x="80" y="61" width="172" height="5" rx="1" fill="rgba(255,255,255,0.07)"/>
+    <rect x="80" y="70" width="182" height="5" rx="1" fill="rgba(255,255,255,0.07)"/>
+    <rect x="80" y="82" width="198" height="24" rx="3" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+    <text x="86" y="97" font-family="system-ui" font-size="8" fill="${c}" opacity="0.6">▶</text>
+    <rect x="96" y="91" width="82" height="6" rx="2" fill="${c}" opacity="0.18"/>
+    <rect x="80" y="114" width="198" height="56" rx="3" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+    <rect x="80" y="114" width="198" height="13" rx="3" fill="${c}" opacity="0.1"/>
+    <text x="86" y="124" font-family="system-ui" font-size="5" font-weight="700" fill="${c}" opacity="0.8">TASK</text>
+    <text x="146" y="124" font-family="system-ui" font-size="5" font-weight="700" fill="${c}" opacity="0.8">STATUS</text>
+    <text x="210" y="124" font-family="system-ui" font-size="5" font-weight="700" fill="${c}" opacity="0.8">DATE</text>
+    <line x1="80" y1="127" x2="278" y2="127" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+    <rect x="86" y="130" width="44" height="5" rx="1" fill="rgba(255,255,255,0.12)"/>
+    <rect x="146" y="130" width="32" height="5" rx="1" fill="${c}" opacity="0.22"/>
+    <rect x="86" y="140" width="54" height="5" rx="1" fill="rgba(255,255,255,0.09)"/>
+    <rect x="146" y="140" width="28" height="5" rx="1" fill="rgba(16,185,129,0.28)"/>
+    <rect x="86" y="150" width="38" height="5" rx="1" fill="rgba(255,255,255,0.09)"/>
+    <rect x="146" y="150" width="30" height="5" rx="1" fill="rgba(245,158,11,0.28)"/>
+    <rect x="86" y="160" width="48" height="5" rx="1" fill="rgba(255,255,255,0.09)"/>
+    <rect x="146" y="160" width="26" height="5" rx="1" fill="rgba(239,68,68,0.28)"/>`);
+}
+function mockupCanva(c) {
+  return svgWrap(`<defs><linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${c}" stop-opacity="0.22"/><stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.16"/></linearGradient></defs>
+    <rect width="300" height="180" fill="#060a14"/>
+    <rect x="12" y="8" width="132" height="162" rx="6" fill="url(#cg1)" stroke="${c}" stroke-width="0.5" stroke-opacity="0.3"/>
+    <circle cx="78" cy="66" r="28" fill="${c}" opacity="0.08"/>
+    <circle cx="78" cy="66" r="18" fill="${c}" opacity="0.1"/>
+    <rect x="28" y="102" width="88" height="11" rx="2" fill="rgba(255,255,255,0.65)"/>
+    <rect x="33" y="117" width="78" height="7" rx="2" fill="rgba(255,255,255,0.32)"/>
+    <rect x="40" y="128" width="62" height="5" rx="2" fill="rgba(255,255,255,0.18)"/>
+    <rect x="32" y="142" width="80" height="18" rx="9" fill="${c}" opacity="0.65"/>
+    <rect x="42" y="147" width="60" height="8" rx="2" fill="rgba(255,255,255,0.25)"/>
+    <rect x="154" y="8" width="66" height="76" rx="4" fill="${c}" opacity="0.07" stroke="${c}" stroke-width="0.5" stroke-opacity="0.22"/>
+    <circle cx="187" cy="33" r="14" fill="${c}" opacity="0.1"/>
+    <rect x="163" y="54" width="46" height="6" rx="2" fill="rgba(255,255,255,0.28)"/>
+    <rect x="166" y="64" width="38" height="5" rx="2" fill="rgba(255,255,255,0.14)"/>
+    <rect x="163" y="74" width="32" height="9" rx="4" fill="${c}" opacity="0.45"/>
+    <rect x="228" y="8" width="60" height="76" rx="4" fill="${c}" opacity="0.07" stroke="${c}" stroke-width="0.5" stroke-opacity="0.22"/>
+    <rect x="234" y="17" width="48" height="30" rx="3" fill="${c}" opacity="0.12"/>
+    <rect x="236" y="53" width="42" height="6" rx="2" fill="rgba(255,255,255,0.28)"/>
+    <rect x="239" y="63" width="32" height="5" rx="2" fill="rgba(255,255,255,0.14)"/>
+    <rect x="236" y="73" width="30" height="9" rx="4" fill="${c}" opacity="0.45"/>
+    <rect x="154" y="92" width="66" height="76" rx="4" fill="${c}" opacity="0.07" stroke="${c}" stroke-width="0.5" stroke-opacity="0.22"/>
+    <circle cx="187" cy="116" r="12" fill="${c}" opacity="0.12"/>
+    <rect x="163" y="137" width="46" height="6" rx="2" fill="rgba(255,255,255,0.28)"/>
+    <rect x="166" y="147" width="38" height="5" rx="2" fill="rgba(255,255,255,0.14)"/>
+    <rect x="163" y="157" width="32" height="9" rx="4" fill="${c}" opacity="0.45"/>
+    <rect x="228" y="92" width="60" height="76" rx="4" fill="${c}" opacity="0.07" stroke="${c}" stroke-width="0.5" stroke-opacity="0.22"/>
+    <rect x="234" y="100" width="48" height="34" rx="3" fill="${c}" opacity="0.12"/>
+    <rect x="236" y="140" width="42" height="6" rx="2" fill="rgba(255,255,255,0.28)"/>
+    <rect x="239" y="150" width="32" height="5" rx="2" fill="rgba(255,255,255,0.14)"/>
+    <rect x="236" y="160" width="30" height="9" rx="4" fill="${c}" opacity="0.45"/>`);
+}
+function mockupResume(c) {
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="55" y="5" width="190" height="170" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+    <rect x="55" y="5" width="190" height="40" rx="3" fill="${c}" opacity="0.14"/>
+    <rect x="63" y="11" width="72" height="9" rx="2" fill="rgba(255,255,255,0.6)"/>
+    <rect x="63" y="24" width="52" height="5" rx="2" fill="${c}" opacity="0.55"/>
+    <rect x="63" y="33" width="84" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+    <circle cx="222" cy="24" r="14" fill="${c}" opacity="0.18"/>
+    <circle cx="222" cy="24" r="9" fill="${c}" opacity="0.14"/>
+    <rect x="63" y="52" width="42" height="5" rx="2" fill="${c}" opacity="0.65"/>
+    <line x1="109" y1="54.5" x2="235" y2="54.5" stroke="${c}" stroke-width="0.5" opacity="0.35"/>
+    <rect x="63" y="62" width="82" height="5" rx="2" fill="rgba(255,255,255,0.35)"/>
+    <rect x="63" y="71" width="122" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+    <rect x="63" y="79" width="112" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+    <rect x="63" y="87" width="102" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+    <rect x="63" y="99" width="32" height="5" rx="2" fill="${c}" opacity="0.65"/>
+    <line x1="99" y1="101.5" x2="235" y2="101.5" stroke="${c}" stroke-width="0.5" opacity="0.35"/>
+    <rect x="63" y="109" width="36" height="10" rx="10" fill="${c}" opacity="0.18"/>
+    <rect x="104" y="109" width="32" height="10" rx="10" fill="${c}" opacity="0.18"/>
+    <rect x="141" y="109" width="42" height="10" rx="10" fill="${c}" opacity="0.18"/>
+    <rect x="63" y="124" width="46" height="10" rx="10" fill="${c}" opacity="0.13"/>
+    <rect x="114" y="124" width="36" height="10" rx="10" fill="${c}" opacity="0.13"/>
+    <rect x="63" y="141" width="42" height="5" rx="2" fill="${c}" opacity="0.65"/>
+    <line x1="109" y1="143.5" x2="235" y2="143.5" stroke="${c}" stroke-width="0.5" opacity="0.35"/>
+    <rect x="63" y="151" width="92" height="5" rx="2" fill="rgba(255,255,255,0.3)"/>
+    <rect x="63" y="160" width="72" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+    <rect x="63" y="168" width="82" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>`);
+}
+function mockupSVGCut(c) {
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="18" y="8" width="264" height="164" rx="4" fill="none" stroke="${c}" stroke-width="1" stroke-dasharray="5,3" opacity="0.45"/>
+    <g transform="translate(150,90)">
+      <ellipse cx="0" cy="-46" rx="11" ry="20" fill="${c}" opacity="0.14" transform="rotate(0)"/>
+      <ellipse cx="0" cy="-46" rx="11" ry="20" fill="${c}" opacity="0.14" transform="rotate(45)"/>
+      <ellipse cx="0" cy="-46" rx="11" ry="20" fill="${c}" opacity="0.14" transform="rotate(90)"/>
+      <ellipse cx="0" cy="-46" rx="11" ry="20" fill="${c}" opacity="0.14" transform="rotate(135)"/>
+      <ellipse cx="0" cy="-46" rx="11" ry="20" fill="${c}" opacity="0.14" transform="rotate(180)"/>
+      <ellipse cx="0" cy="-46" rx="11" ry="20" fill="${c}" opacity="0.14" transform="rotate(225)"/>
+      <ellipse cx="0" cy="-46" rx="11" ry="20" fill="${c}" opacity="0.14" transform="rotate(270)"/>
+      <ellipse cx="0" cy="-46" rx="11" ry="20" fill="${c}" opacity="0.14" transform="rotate(315)"/>
+      <circle r="30" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.35"/>
+      <circle r="20" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.25"/>
+      <circle r="10" fill="${c}" opacity="0.18"/>
+      <path d="M0,-28 Q10,-14 0,0 Q-10,-14 0,-28" fill="${c}" opacity="0.28"/>
+      <path d="M0,-28 Q10,-14 0,0 Q-10,-14 0,-28" fill="${c}" opacity="0.28" transform="rotate(60)"/>
+      <path d="M0,-28 Q10,-14 0,0 Q-10,-14 0,-28" fill="${c}" opacity="0.28" transform="rotate(120)"/>
+      <path d="M0,-28 Q10,-14 0,0 Q-10,-14 0,-28" fill="${c}" opacity="0.28" transform="rotate(180)"/>
+      <path d="M0,-28 Q10,-14 0,0 Q-10,-14 0,-28" fill="${c}" opacity="0.28" transform="rotate(240)"/>
+      <path d="M0,-28 Q10,-14 0,0 Q-10,-14 0,-28" fill="${c}" opacity="0.28" transform="rotate(300)"/>
+    </g>
+    <text x="26" y="23" font-family="system-ui" font-size="6" fill="${c}" opacity="0.55">● Layer 1</text>
+    <text x="26" y="33" font-family="system-ui" font-size="6" fill="rgba(255,255,255,0.3)">○ Layer 2</text>
+    <text x="26" y="43" font-family="system-ui" font-size="6" fill="rgba(255,255,255,0.2)">○ Layer 3</text>
+    <text x="26" y="168" font-family="system-ui" font-size="5" fill="${c}" opacity="0.4">Cut-ready SVG · Cricut & Silhouette compatible</text>`);
+}
+function mockupWallArt(c) {
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="22" y="7" width="256" height="166" rx="3" fill="rgba(255,255,255,0.04)" stroke="${c}" stroke-width="1.5" stroke-opacity="0.28"/>
+    <rect x="30" y="15" width="240" height="150" rx="2" fill="none" stroke="${c}" stroke-width="0.4" stroke-opacity="0.18" stroke-dasharray="2,2"/>
+    <path d="M150,26 C133,30 118,24 113,33 C108,42 130,44 150,40 C170,44 192,42 187,33 C182,24 167,30 150,26" fill="${c}" opacity="0.14"/>
+    <rect x="72" y="50" width="156" height="14" rx="2" fill="rgba(255,255,255,0.55)"/>
+    <rect x="92" y="70" width="116" height="9" rx="2" fill="rgba(255,255,255,0.24)"/>
+    <line x1="78" y1="86" x2="222" y2="86" stroke="${c}" stroke-width="0.5" opacity="0.45"/>
+    <circle cx="150" cy="86" r="3" fill="${c}" opacity="0.55"/>
+    <circle cx="140" cy="86" r="2" fill="${c}" opacity="0.38"/>
+    <circle cx="160" cy="86" r="2" fill="${c}" opacity="0.38"/>
+    <rect x="88" y="95" width="124" height="7" rx="2" fill="rgba(255,255,255,0.2)"/>
+    <rect x="98" y="107" width="104" height="6" rx="2" fill="rgba(255,255,255,0.14)"/>
+    <rect x="108" y="118" width="84" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+    <path d="M150,144 C133,140 118,146 113,137 C108,128 130,126 150,130 C170,126 192,128 187,137 C182,146 167,140 150,144" fill="${c}" opacity="0.14"/>`);
+}
+function mockupInvitation(c) {
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="52" y="6" width="196" height="168" rx="4" fill="rgba(255,255,255,0.04)" stroke="${c}" stroke-width="0.8" stroke-opacity="0.38"/>
+    <rect x="60" y="14" width="180" height="152" rx="3" fill="none" stroke="${c}" stroke-width="0.4" stroke-opacity="0.25" stroke-dasharray="2,2"/>
+    <path d="M63,17 Q72,17 72,26" fill="none" stroke="${c}" stroke-width="1" opacity="0.45"/>
+    <path d="M237,17 Q228,17 228,26" fill="none" stroke="${c}" stroke-width="1" opacity="0.45"/>
+    <path d="M63,163 Q72,163 72,154" fill="none" stroke="${c}" stroke-width="1" opacity="0.45"/>
+    <path d="M237,163 Q228,163 228,154" fill="none" stroke="${c}" stroke-width="1" opacity="0.45"/>
+    <circle cx="150" cy="42" r="18" fill="none" stroke="${c}" stroke-width="0.7" opacity="0.45"/>
+    <circle cx="150" cy="42" r="13" fill="${c}" opacity="0.1"/>
+    <rect x="143" y="36" width="14" height="12" rx="2" fill="${c}" opacity="0.28"/>
+    <rect x="78" y="68" width="144" height="11" rx="2" fill="rgba(255,255,255,0.5)"/>
+    <rect x="93" y="84" width="114" height="7" rx="2" fill="${c}" opacity="0.38"/>
+    <line x1="88" y1="97" x2="212" y2="97" stroke="rgba(255,255,255,0.09)" stroke-width="0.5"/>
+    <rect x="103" y="104" width="94" height="6" rx="2" fill="rgba(255,255,255,0.24)"/>
+    <rect x="108" y="114" width="84" height="5" rx="2" fill="rgba(255,255,255,0.15)"/>
+    <rect x="113" y="124" width="74" height="5" rx="2" fill="rgba(255,255,255,0.12)"/>
+    <rect x="113" y="141" width="74" height="20" rx="10" fill="${c}" opacity="0.22"/>
+    <rect x="118" y="146" width="64" height="10" rx="5" fill="${c}" opacity="0.28"/>`);
+}
+function mockupWorksheet(c) {
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="18" y="6" width="264" height="168" rx="3" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" stroke-width="0.5"/>
+    <rect x="18" y="6" width="264" height="28" rx="3" fill="${c}" opacity="0.13"/>
+    <rect x="26" y="11" width="82" height="9" rx="2" fill="rgba(255,255,255,0.5)"/>
+    <rect x="26" y="24" width="56" height="5" rx="2" fill="${c}" opacity="0.45"/>
+    <text x="26" y="48" font-family="system-ui" font-size="5" fill="rgba(255,255,255,0.38)">Name: _______________</text>
+    <text x="170" y="48" font-family="system-ui" font-size="5" fill="rgba(255,255,255,0.38)">Date: ________________</text>
+    <line x1="26" y1="51" x2="148" y2="51" stroke="rgba(255,255,255,0.14)" stroke-width="0.5"/>
+    <line x1="170" y1="51" x2="276" y2="51" stroke="rgba(255,255,255,0.14)" stroke-width="0.5"/>
+    <rect x="18" y="57" width="264" height="28" rx="2" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+    <rect x="18" y="57" width="22" height="28" rx="2" fill="${c}" opacity="0.15"/>
+    <text x="29" y="75" text-anchor="middle" font-family="system-ui" font-size="9" font-weight="700" fill="${c}" opacity="0.75">1</text>
+    <rect x="46" y="63" width="164" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
+    <rect x="46" y="73" width="104" height="4" rx="1" fill="rgba(255,255,255,0.1)"/>
+    <rect x="18" y="89" width="264" height="28" rx="2" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+    <rect x="18" y="89" width="22" height="28" rx="2" fill="${c}" opacity="0.15"/>
+    <text x="29" y="107" text-anchor="middle" font-family="system-ui" font-size="9" font-weight="700" fill="${c}" opacity="0.75">2</text>
+    <rect x="46" y="95" width="144" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
+    <rect x="46" y="105" width="114" height="4" rx="1" fill="rgba(255,255,255,0.1)"/>
+    <rect x="18" y="121" width="128" height="48" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+    <rect x="18" y="121" width="128" height="11" rx="2" fill="${c}" opacity="0.09"/>
+    <rect x="26" y="137" width="52" height="4" rx="1" fill="rgba(255,255,255,0.14)"/>
+    <rect x="26" y="147" width="62" height="4" rx="1" fill="rgba(255,255,255,0.11)"/>
+    <rect x="26" y="157" width="46" height="4" rx="1" fill="rgba(255,255,255,0.09)"/>
+    <rect x="154" y="121" width="128" height="48" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+    <rect x="154" y="121" width="128" height="11" rx="2" fill="${c}" opacity="0.09"/>
+    <rect x="162" y="135" width="8" height="8" rx="1" fill="none" stroke="${c}" stroke-width="0.8" opacity="0.45"/>
+    <rect x="175" y="137" width="52" height="4" rx="1" fill="rgba(255,255,255,0.15)"/>
+    <rect x="162" y="147" width="8" height="8" rx="1" fill="${c}" opacity="0.28"/>
+    <rect x="175" y="149" width="46" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+    <rect x="162" y="159" width="8" height="8" rx="1" fill="none" stroke="${c}" stroke-width="0.8" opacity="0.45"/>
+    <rect x="175" y="161" width="58" height="4" rx="1" fill="rgba(255,255,255,0.09)"/>`);
+}
+function mockupWellness(c) {
+  const filled=[[1,1,1,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1,1,1,0],[1,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,0,1],[0,1,1,0,1,0,1,1,1,0,1,1,0,1,0,1,1,0,1,1,0,1,0,1,1,0,1,1,0,1,1],[1,1,0,1,1,0,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,0,1,0],[0,0,1,1,0,1,1,0,1,0,1,1,0,1,1,0,1,0,1,1,0,1,1,0,1,1,0,1,0,1,1]];
+  const habits=['💧 Water','🏃 Exercise','🧘 Meditate','😴 8h Sleep','🥗 Eat Clean'];
+  let grid='',dayH='';
+  for(let d=0;d<31;d++){const x=104+d*6;if(x>282)break;if(d===0||d===4||d===9||d===14||d===19||d===24||d===29)dayH+=`<text x="${x}" y="36" text-anchor="middle" font-family="system-ui" font-size="4.5" fill="rgba(255,255,255,0.28)">${d+1}</text>`;}
+  habits.forEach((h,hi)=>{const y=44+hi*22;grid+=`<text x="20" y="${y+8}" font-family="system-ui" font-size="6.5" fill="rgba(255,255,255,0.45)">${h}</text>`;for(let d=0;d<31;d++){const x=104+d*6;if(x>282)break;const f=filled[hi][d];grid+=`<circle cx="${x}" cy="${y+4}" r="2.2" fill="${f?c:'transparent'}" stroke="${c}" stroke-width="${f?0:0.5}" opacity="${f?0.65:0.18}"/>`;}});
+  const pct=Math.round(filled.flat().filter(v=>v).length/filled.flat().length*100);
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="10" y="7" width="280" height="166" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>
+    <rect x="10" y="7" width="280" height="22" rx="4" fill="${c}" opacity="0.11"/>
+    <text x="150" y="21" text-anchor="middle" font-family="system-ui" font-size="8" font-weight="700" letter-spacing="1.5" fill="${c}" opacity="0.88">HABIT TRACKER</text>
+    ${dayH}${grid}
+    <rect x="18" y="160" width="264" height="5" rx="2" fill="rgba(255,255,255,0.06)"/>
+    <rect x="18" y="160" width="${264*pct/100}" height="5" rx="2" fill="${c}" opacity="0.48"/>
+    <text x="20" y="173" font-family="system-ui" font-size="5.5" fill="rgba(255,255,255,0.32)">${pct}% completion this month</text>`);
+}
+function mockupAITools(c) {
+  return svgWrap(`<rect width="300" height="180" fill="#060a14"/>
+    <rect x="10" y="7" width="280" height="166" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>
+    <rect x="10" y="7" width="280" height="19" rx="6" fill="rgba(255,255,255,0.05)"/>
+    <circle cx="24" cy="16.5" r="4" fill="#ef4444" opacity="0.65"/>
+    <circle cx="36" cy="16.5" r="4" fill="#f59e0b" opacity="0.65"/>
+    <circle cx="48" cy="16.5" r="4" fill="#10b981" opacity="0.65"/>
+    <text x="150" y="20" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,255,255,0.38)">AI Prompt Pack</text>
+    <rect x="18" y="33" width="52" height="8" rx="2" fill="${c}" opacity="0.18"/>
+    <text x="20" y="40" font-family="monospace" font-size="6" fill="${c}" opacity="0.75">SYSTEM</text>
+    <rect x="18" y="44" width="264" height="22" rx="3" fill="rgba(255,255,255,0.03)" stroke="${c}" stroke-width="0.3" stroke-opacity="0.28"/>
+    <rect x="24" y="49" width="184" height="4" rx="1" fill="${c}" opacity="0.28"/>
+    <rect x="24" y="57" width="144" height="4" rx="1" fill="${c}" opacity="0.18"/>
+    <rect x="18" y="73" width="32" height="8" rx="2" fill="rgba(16,185,129,0.18)"/>
+    <text x="20" y="80" font-family="monospace" font-size="6" fill="rgba(16,185,129,0.75)">USER</text>
+    <rect x="18" y="84" width="264" height="18" rx="3" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.3"/>
+    <rect x="24" y="89" width="204" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+    <rect x="24" y="97" width="124" height="4" rx="1" fill="rgba(255,255,255,0.1)"/>
+    <rect x="18" y="109" width="62" height="8" rx="2" fill="rgba(139,92,246,0.18)"/>
+    <text x="20" y="116" font-family="monospace" font-size="6" fill="rgba(139,92,246,0.75)">ASSISTANT</text>
+    <rect x="18" y="120" width="264" height="38" rx="3" fill="rgba(139,92,246,0.05)" stroke="rgba(139,92,246,0.14)" stroke-width="0.3"/>
+    <rect x="24" y="126" width="194" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+    <rect x="24" y="134" width="214" height="4" rx="1" fill="rgba(255,255,255,0.15)"/>
+    <rect x="24" y="142" width="164" height="4" rx="1" fill="rgba(255,255,255,0.1)"/>
+    <rect x="24" y="150" width="84" height="4" rx="1" fill="rgba(255,255,255,0.07)"/>
+    <rect x="114" y="150" width="4" height="4" rx="0.5" fill="${c}" opacity="0.75"/>`);
+}
+function generateMockup(p) {
+  const c=CATEGORY_COLORS[p.category]||'#3b82f6';
+  const cat=p.category;
+  if(cat==='Planners & Organizers')return mockupPlanner(c);
+  if(cat==='Google Sheets / Excel')return mockupSpreadsheet(c);
+  if(cat==='Notion Templates')return mockupNotion(c);
+  if(cat==='Canva Templates')return mockupCanva(c);
+  if(cat==='Resume Templates')return mockupResume(c);
+  if(cat==='SVG Cut Files')return mockupSVGCut(c);
+  if(cat==='Wall Art Printables')return mockupWallArt(c);
+  if(cat==='Invitations & Events')return mockupInvitation(c);
+  if(cat==='Educational Worksheets')return mockupWorksheet(c);
+  if(cat==='Wellness & Lifestyle')return mockupWellness(c);
+  if(cat==='AI & Digital Tools')return mockupAITools(c);
+  return`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180" width="100%" height="100%" style="position:absolute;inset:0;"><rect width="300" height="180" fill="#060a14"/><text x="150" y="100" text-anchor="middle" font-size="52" font-family="system-ui">${p.emoji}</text></svg>`;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 let currentFilter = 'all';
 
 function filterCat(cat, btn) {
@@ -882,8 +1189,8 @@ function renderGrid() {
 
     return `
     <div class="card" id="card-${p.id}">
-      <div class="card-thumb" style="background:linear-gradient(135deg,${color}18,${color}08);">
-        <div class="card-thumb-inner">${p.emoji}</div>
+      <div class="card-thumb" style="background:#060a14;">
+        <div class="card-thumb-inner">${generateMockup(p)}</div>
         ${p.quickWin ? '<span class="quick-win-badge">⭐ Quick Win</span>' : ''}
       </div>
       <div class="card-body">
