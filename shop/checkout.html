@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Quorbz</title>
+  <script src="/shop/products-data.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #3b82f6;
+      --accent-light: #60a5fa;
+      --purple: #8b5cf6;
+      --bg: #060a14;
+      --surface: #0b1120;
+      --elevated: #111827;
+      --border: rgba(255,255,255,0.06);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── NAV (minimal) ── */
+    nav {
+      background: rgba(6,10,20,0.95);
+      border-bottom: 1px solid var(--border);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+    }
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--accent-light), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-secure {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .page-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .page-wrap { grid-template-columns: 1fr; gap: 32px; padding: 24px 16px 60px; }
+      nav { padding: 0 16px; }
+      .order-summary { order: -1; }
+    }
+
+    /* ── FORM COLUMN ── */
+    .form-col { display: flex; flex-direction: column; gap: 32px; }
+
+    .form-heading {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    /* ── TABS ── */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      background: var(--elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      color: var(--text-muted);
+      background: none;
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .tab-pane { display: none; flex-direction: column; gap: 16px; }
+    .tab-pane.active { display: flex; }
+
+    /* ── FORM SECTION ── */
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-section-title svg { color: var(--accent-light); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"] {
+      width: 100%;
+      background: var(--elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    input[type="text"].has-icon,
+    input[type="email"].has-icon,
+    input[type="password"].has-icon,
+    input[type="tel"].has-icon { padding-left: 42px; }
+
+    input::placeholder { color: var(--text-muted); }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .checkbox-row span {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: -4px;
+    }
+
+    /* ── PLACE ORDER BTN ── */
+    .place-order-btn {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    .place-order-btn:hover { opacity: 0.92; }
+    .place-order-btn:active { transform: scale(0.98); }
+    .place-order-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── TRUST BADGES ── */
+    .trust-badges {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .trust-badge svg { color: #4ade80; }
+
+    .small-print {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── ORDER SUMMARY ── */
+    .order-summary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: sticky;
+      top: 80px;
+    }
+
+    .summary-title {
+      font-size: 16px;
+      font-weight: 700;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-items { display: flex; flex-direction: column; gap: 12px; }
+
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .summary-emoji {
+      width: 44px;
+      height: 44px;
+      background: var(--elevated);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .summary-qty-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .summary-item-info { flex: 1; min-width: 0; }
+    .summary-item-title { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+    .summary-item-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .summary-item-price { font-size: 14px; font-weight: 700; color: var(--text-primary); flex-shrink: 0; }
+
+    .summary-totals { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border); padding-top: 16px; }
+
+    .summary-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); }
+    .summary-row.shipping span:last-child { color: #4ade80; font-weight: 600; }
+    .summary-row.total { font-size: 18px; font-weight: 800; color: var(--text-primary); padding-top: 8px; border-top: 1px solid var(--border); margin-top: 4px; }
+
+    .empty-cart-msg {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .empty-cart-msg a { color: var(--accent-light); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Quorbz</a>
+  <div class="nav-secure">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    Secure Checkout
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-wrap">
+
+  <!-- LEFT: FORM -->
+  <div class="form-col">
+    <h1 class="form-heading">Complete Your Order</h1>
+
+    <!-- TABS -->
+    <div>
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-guest" onclick="switchTab('guest')">Guest Checkout</button>
+        <button class="tab-btn" id="tab-signin" onclick="switchTab('signin')">Sign In / Create Account</button>
+      </div>
+    </div>
+
+    <!-- GUEST TAB -->
+    <div class="tab-pane active" id="pane-guest">
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Contact Information
+        </div>
+        <div class="form-group">
+          <label for="guest-email">Email Address</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input type="email" id="guest-email" class="has-icon" placeholder="you@example.com" autocomplete="email" />
+          </div>
+        </div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="email-downloads" checked />
+          <span>Email me my download links after purchase</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- SIGN IN TAB -->
+    <div class="tab-pane" id="pane-signin">
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          Account
+        </div>
+
+        <!-- Sub-tabs -->
+        <div style="display:flex;gap:12px;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:4px">
+          <button onclick="switchAccount('login')" id="acct-login" style="background:none;border:none;font-size:13px;font-weight:700;color:var(--accent-light);cursor:pointer;padding-bottom:4px;border-bottom:2px solid var(--accent);font-family:inherit">Sign In</button>
+          <button onclick="switchAccount('create')" id="acct-create" style="background:none;border:none;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;padding-bottom:4px;border-bottom:2px solid transparent;font-family:inherit">Create Account</button>
+        </div>
+
+        <div id="acct-login-form">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="form-group">
+              <label for="si-email">Email</label>
+              <input type="email" id="si-email" placeholder="you@example.com" />
+            </div>
+            <div class="form-group">
+              <label for="si-password">Password</label>
+              <div class="input-wrap">
+                <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input type="password" id="si-password" class="has-icon" placeholder="••••••••" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="acct-create-form" style="display:none">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-first">First Name</label>
+                <input type="text" id="reg-first" placeholder="Jane" />
+              </div>
+              <div class="form-group">
+                <label for="reg-last">Last Name</label>
+                <input type="text" id="reg-last" placeholder="Doe" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="reg-email">Email</label>
+              <input type="email" id="reg-email" placeholder="you@example.com" />
+            </div>
+            <div class="form-group">
+              <label for="reg-pw">Password</label>
+              <div class="input-wrap">
+                <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input type="password" id="reg-pw" class="has-icon" placeholder="Create a password" />
+              </div>
+              <span class="field-hint">At least 8 characters</span>
+            </div>
+            <div class="form-group">
+              <label for="reg-pw2">Confirm Password</label>
+              <div class="input-wrap">
+                <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input type="password" id="reg-pw2" class="has-icon" placeholder="Repeat password" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT (shared, always shown) -->
+    <div class="form-section">
+      <div class="form-section-title">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+        </svg>
+        Payment Information
+      </div>
+
+      <div class="form-group">
+        <label for="card-number">Card Number</label>
+        <div class="input-wrap">
+          <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          <input type="tel" id="card-number" class="has-icon" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)" autocomplete="cc-number" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="card-expiry">Expiry Date</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <input type="tel" id="card-expiry" class="has-icon" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)" autocomplete="cc-exp" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="card-cvv">Security Code</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input type="tel" id="card-cvv" class="has-icon" placeholder="CVV" maxlength="4" autocomplete="cc-csc" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="card-name">Name on Card</label>
+        <input type="text" id="card-name" placeholder="Jane Doe" autocomplete="cc-name" />
+      </div>
+    </div>
+
+    <!-- PLACE ORDER -->
+    <button class="place-order-btn" id="place-order-btn" onclick="placeOrder()">
+      <span id="btn-text">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;margin-right:6px">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        Place Order
+      </span>
+      <div class="spinner" id="order-spinner"></div>
+    </button>
+
+    <!-- TRUST BADGES -->
+    <div class="trust-badges">
+      <div class="trust-badge">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        256-bit SSL
+      </div>
+      <div class="trust-badge">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        Instant Download
+      </div>
+      <div class="trust-badge">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Personal License
+      </div>
+    </div>
+
+    <p class="small-print">No physical item shipped. Digital downloads delivered immediately after payment.<br>By completing this purchase you agree to our Terms of Service and Privacy Policy.</p>
+  </div>
+
+  <!-- RIGHT: ORDER SUMMARY -->
+  <aside class="order-summary">
+    <div class="summary-title">Order Summary</div>
+    <div class="summary-items" id="summary-items">
+      <!-- Injected by JS -->
+    </div>
+    <div class="summary-totals" id="summary-totals">
+      <!-- Injected by JS -->
+    </div>
+  </aside>
+
+</div>
+
+<script>
+const CART_KEY = 'quorbz_cart';
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+  catch { return []; }
+}
+
+function midPrice(pr) {
+  if (!pr) return 0;
+  const nums = pr.replace(/\$/g, '').split('-').map(Number);
+  return nums.length === 1 ? nums[0] : (nums[0] + nums[1]) / 2;
+}
+
+function getCartTotal() {
+  return getCart().reduce((s, i) => s + i.price * i.qty, 0);
+}
+
+// ── TABS ──
+function switchTab(tab) {
+  document.getElementById('pane-guest').classList.toggle('active', tab === 'guest');
+  document.getElementById('pane-signin').classList.toggle('active', tab === 'signin');
+  document.getElementById('tab-guest').classList.toggle('active', tab === 'guest');
+  document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+}
+
+function switchAccount(type) {
+  const loginBtn = document.getElementById('acct-login');
+  const createBtn = document.getElementById('acct-create');
+  const loginForm = document.getElementById('acct-login-form');
+  const createForm = document.getElementById('acct-create-form');
+  if (type === 'login') {
+    loginForm.style.display = 'block'; createForm.style.display = 'none';
+    loginBtn.style.color = 'var(--accent-light)'; loginBtn.style.borderBottom = '2px solid var(--accent)';
+    createBtn.style.color = 'var(--text-muted)'; createBtn.style.borderBottom = '2px solid transparent';
+  } else {
+    loginForm.style.display = 'none'; createForm.style.display = 'block';
+    createBtn.style.color = 'var(--accent-light)'; createBtn.style.borderBottom = '2px solid var(--accent)';
+    loginBtn.style.color = 'var(--text-muted)'; loginBtn.style.borderBottom = '2px solid transparent';
+  }
+}
+
+// ── CARD FORMATTERS ──
+function formatCard(el) {
+  let val = el.value.replace(/\D/g, '').slice(0, 16);
+  el.value = val.replace(/(.{4})/g, '$1 ').trim();
+}
+
+function formatExpiry(el) {
+  let val = el.value.replace(/\D/g, '').slice(0, 4);
+  if (val.length >= 3) val = val.slice(0, 2) + ' / ' + val.slice(2);
+  el.value = val;
+}
+
+// ── ORDER SUMMARY ──
+function renderSummary() {
+  const cart = getCart();
+  const itemsEl = document.getElementById('summary-items');
+  const totalsEl = document.getElementById('summary-totals');
+
+  if (cart.length === 0) {
+    itemsEl.innerHTML = `<div class="empty-cart-msg">Your cart is empty. <a href="/shop/">Browse products →</a></div>`;
+    totalsEl.innerHTML = '';
+    return;
+  }
+
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="summary-item">
+      <div class="summary-emoji">
+        ${item.emoji}
+        <div class="summary-qty-badge">${item.qty}</div>
+      </div>
+      <div class="summary-item-info">
+        <div class="summary-item-title">${item.title}</div>
+        <div class="summary-item-meta">${item.variant}</div>
+      </div>
+      <div class="summary-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+    </div>
+  `).join('');
+
+  const subtotal = getCartTotal();
+  totalsEl.innerHTML = `
+    <div class="summary-row"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+    <div class="summary-row shipping"><span>Instant Digital Download</span><span>FREE</span></div>
+    <div class="summary-row total"><span>Total</span><span>$${subtotal.toFixed(2)}</span></div>
+  `;
+}
+
+// ── PLACE ORDER ──
+function placeOrder() {
+  const btn = document.getElementById('place-order-btn');
+  const btnText = document.getElementById('btn-text');
+  const spinner = document.getElementById('order-spinner');
+
+  // Basic validation
+  const cardNum = document.getElementById('card-number').value.replace(/\s/g,'');
+  if (cardNum.length < 15) { shake(document.getElementById('card-number')); return; }
+
+  btn.disabled = true;
+  btnText.style.display = 'none';
+  spinner.style.display = 'block';
+
+  const orderNum = 'QZ' + Math.floor(100000 + Math.random() * 900000);
+  const guestEmail = document.getElementById('guest-email').value || '';
+
+  setTimeout(() => {
+    window.location.href = `/shop/confirm.html?order=${orderNum}&email=${encodeURIComponent(guestEmail)}`;
+  }, 2000);
+}
+
+function shake(el) {
+  el.style.animation = 'none';
+  el.style.borderColor = '#f87171';
+  el.offsetHeight; // reflow
+  setTimeout(() => { el.style.borderColor = ''; }, 1500);
+  el.focus();
+}
+
+renderSummary();
+</script>
+</body>
+</html>

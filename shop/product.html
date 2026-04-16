@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — Quorbz Digital Products</title>
+  <script src="/shop/products-data.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #3b82f6;
+      --accent-light: #60a5fa;
+      --purple: #8b5cf6;
+      --bg: #060a14;
+      --surface: #0b1120;
+      --elevated: #111827;
+      --border: rgba(255,255,255,0.06);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(6,10,20,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 32px;
+    }
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--accent-light), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      flex-shrink: 0;
+    }
+
+    .nav-links { display: flex; gap: 24px; align-items: center; flex: 1; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-secondary); font-size: 14px;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-actions { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+    .nav-signin { font-size: 13px; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-signin:hover { color: var(--text-primary); }
+
+    .cart-btn {
+      position: relative;
+      background: var(--elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      color: var(--text-primary);
+    }
+    .cart-btn:hover { background: #1e2a3a; border-color: rgba(255,255,255,0.12); }
+
+    .cart-badge {
+      position: absolute; top: -6px; right: -6px;
+      background: var(--accent); color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent-light); }
+    .breadcrumb-sep { color: var(--text-muted); opacity: 0.4; }
+    .breadcrumb-current { color: var(--text-secondary); }
+
+    /* ── PRODUCT LAYOUT ── */
+    .product-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 720px) {
+      .product-wrap { grid-template-columns: 1fr; gap: 32px; padding: 24px 16px; }
+      nav { padding: 0 16px; gap: 16px; }
+      .breadcrumb { padding: 12px 16px; }
+    }
+
+    /* ── MOCKUP ── */
+    .mockup-area {
+      position: sticky;
+      top: 80px;
+    }
+
+    .mockup-card {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mockup-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .mockup-emoji { font-size: 96px; line-height: 1; }
+    .mockup-category {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.6);
+      background: rgba(0,0,0,0.3);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .mockup-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .mockup-badge {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ── PRODUCT DETAILS ── */
+    .product-details { display: flex; flex-direction: column; gap: 24px; }
+
+    .detail-title {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .detail-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .detail-price {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent-light);
+    }
+
+    .detail-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-low { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+    .badge-med { background: rgba(234,179,8,0.15); color: #facc15; border: 1px solid rgba(234,179,8,0.25); }
+    .badge-high { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .badge-qw { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+    .badge-platform {
+      background: var(--elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* ── INCLUDED ── */
+    .included-section { display: flex; flex-direction: column; gap: 10px; }
+    .included-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); }
+
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .checklist li svg { flex-shrink: 0; color: #4ade80; margin-top: 1px; }
+
+    /* ── VARIANTS ── */
+    .variants-section { display: flex; flex-direction: column; gap: 10px; }
+    .variants-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); }
+
+    .variant-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .variant-pill {
+      padding: 10px 16px;
+      background: var(--elevated);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .variant-pill:hover { border-color: rgba(255,255,255,0.2); color: var(--text-primary); }
+    .variant-pill.selected { border-color: var(--accent); color: var(--accent-light); background: rgba(59,130,246,0.1); }
+
+    /* ── QTY ── */
+    .qty-section { display: flex; flex-direction: column; gap: 10px; }
+    .qty-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); }
+
+    .qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      background: var(--elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      width: 40px; height: 40px;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s;
+      font-family: inherit;
+    }
+    .qty-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+
+    .qty-display {
+      width: 40px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    /* ── ADD TO CART ── */
+    .atc-btn {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+    .atc-btn:hover { opacity: 0.92; }
+    .atc-btn:active { transform: scale(0.98); }
+    .atc-btn.added { background: linear-gradient(135deg, #16a34a, #15803d); }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── BELOW THE FOLD ── */
+    .below-fold {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    @media (max-width: 720px) {
+      .below-fold { padding: 0 16px 60px; }
+    }
+
+    .section-block { display: flex; flex-direction: column; gap: 16px; }
+
+    .section-heading {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .full-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 560px) { .info-grid { grid-template-columns: 1fr; } }
+
+    .info-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .info-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 6px; }
+    .info-value { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+    .tags-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      padding: 5px 12px;
+      background: var(--elevated);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── RELATED ── */
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 560px) { .related-grid { grid-template-columns: 1fr; } }
+
+    .rel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .rel-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.12); }
+
+    .rel-thumb {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    .rel-body { padding: 12px; }
+    .rel-title { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.3; margin-bottom: 4px; }
+    .rel-price { font-size: 12px; color: var(--accent-light); font-weight: 700; }
+
+    /* ── CART DRAWER ── */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; width: 400px; max-width: 100vw; height: 100vh;
+      background: var(--surface); border-left: 1px solid var(--border); z-index: 201;
+      display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+
+    .cart-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cart-header h2 { font-size: 18px; font-weight: 700; }
+
+    .cart-close {
+      background: var(--elevated); border: 1px solid var(--border); border-radius: 8px;
+      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-secondary); transition: all 0.2s;
+    }
+    .cart-close:hover { color: var(--text-primary); border-color: rgba(255,255,255,0.15); }
+
+    .cart-items {
+      flex: 1; overflow-y: auto; padding: 16px 24px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .cart-items::-webkit-scrollbar { width: 4px; }
+    .cart-items::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .cart-item {
+      background: var(--elevated); border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px; display: flex; gap: 12px; align-items: center;
+    }
+    .cart-item-emoji {
+      font-size: 28px; flex-shrink: 0; width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; background: var(--surface);
+    }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-title { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cart-item-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .cart-item-price { font-size: 14px; font-weight: 700; color: var(--accent-light); flex-shrink: 0; }
+    .cart-item-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.2s; line-height: 0; }
+    .cart-item-remove:hover { color: #f87171; }
+
+    .cart-empty {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--text-muted); gap: 12px; padding: 40px; text-align: center;
+    }
+    .cart-empty svg { opacity: 0.3; }
+    .cart-empty p { font-size: 14px; }
+
+    .cart-footer { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+    .cart-totals { display: flex; flex-direction: column; gap: 6px; }
+    .cart-total-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); }
+    .cart-total-row.grand { font-size: 16px; font-weight: 700; color: var(--text-primary); padding-top: 8px; border-top: 1px solid var(--border); margin-top: 4px; }
+
+    .btn-checkout {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 15px;
+      font-weight: 700; cursor: pointer; text-align: center; text-decoration: none;
+      display: block; transition: opacity 0.2s, transform 0.1s; font-family: inherit;
+    }
+    .btn-checkout:hover { opacity: 0.92; }
+
+    /* ── PICO CHAT ── */
+    .pico-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 150; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+
+    .pico-panel {
+      width: 360px; height: 480px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; box-shadow: 0 24px 64px rgba(0,0,0,0.6); display: flex;
+      flex-direction: column; overflow: hidden;
+      transform: scale(0.9) translateY(20px); transform-origin: bottom right;
+      opacity: 0; pointer-events: none; transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.25s;
+    }
+    .pico-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+
+    .pico-head { background: linear-gradient(135deg, var(--accent), var(--purple)); padding: 16px 18px; display: flex; align-items: center; gap: 10px; }
+    .pico-logo { width: 34px; height: 34px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .pico-head-info { flex: 1; }
+    .pico-head-title { font-size: 14px; font-weight: 700; color: #fff; }
+    .pico-head-sub { font-size: 11px; color: rgba(255,255,255,0.7); }
+    .pico-head-close { background: rgba(255,255,255,0.15); border: none; border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; transition: background 0.2s; }
+    .pico-head-close:hover { background: rgba(255,255,255,0.25); }
+
+    .pico-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .pico-messages::-webkit-scrollbar { width: 3px; }
+    .pico-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .pico-msg { max-width: 85%; padding: 10px 13px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+    .pico-msg.bot { background: var(--elevated); border: 1px solid var(--border); color: var(--text-primary); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .pico-msg.user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+    .pico-chips { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .pico-chip { padding: 6px 12px; background: var(--elevated); border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .pico-chip:hover { border-color: var(--accent); color: var(--accent-light); }
+
+    .pico-input-row { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+    .pico-input { flex: 1; background: var(--elevated); border: 1px solid var(--border); border-radius: 10px; padding: 9px 13px; font-size: 13px; color: var(--text-primary); outline: none; font-family: inherit; }
+    .pico-input::placeholder { color: var(--text-muted); }
+    .pico-input:focus { border-color: var(--accent); }
+
+    .pico-send { width: 38px; height: 38px; background: var(--accent); border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; flex-shrink: 0; transition: background 0.2s; }
+    .pico-send:hover { background: #2563eb; }
+
+    .pico-btn { width: 64px; height: 64px; background: linear-gradient(135deg, var(--accent), var(--purple)); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 24px rgba(59,130,246,0.4); color: #fff; transition: transform 0.2s, box-shadow 0.2s; }
+    .pico-btn:hover { transform: scale(1.05); box-shadow: 0 12px 32px rgba(59,130,246,0.5); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Quorbz</a>
+  <div class="nav-links">
+    <a href="/shop/">Shop</a>
+  </div>
+  <div class="nav-actions">
+    <a href="/signin" class="nav-signin">Sign In</a>
+    <button class="cart-btn" onclick="openCart()" aria-label="Cart">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span class="cart-badge" id="cart-badge"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb" id="breadcrumb">
+  <a href="/shop/">Shop</a>
+  <span class="breadcrumb-sep">›</span>
+  <span id="bc-category">—</span>
+  <span class="breadcrumb-sep">›</span>
+  <span class="breadcrumb-current" id="bc-title">—</span>
+</div>
+
+<!-- PRODUCT DETAIL -->
+<div class="product-wrap" id="product-wrap">
+  <!-- Injected by JS -->
+</div>
+
+<!-- BELOW FOLD -->
+<div class="below-fold" id="below-fold">
+  <!-- Injected by JS -->
+</div>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <button class="cart-close" onclick="closeCart()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer" id="cart-footer" style="display:none">
+    <div class="cart-totals" id="cart-totals"></div>
+    <a href="/shop/checkout.html" class="btn-checkout">Checkout →</a>
+  </div>
+</div>
+
+<!-- PICO CHAT -->
+<div class="pico-wrap">
+  <div class="pico-panel" id="pico-panel">
+    <div class="pico-head">
+      <div class="pico-logo">Q</div>
+      <div class="pico-head-info">
+        <div class="pico-head-title">Quorbz Support</div>
+        <div class="pico-head-sub">Typically replies instantly</div>
+      </div>
+      <button class="pico-head-close" onclick="toggleChat()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="pico-messages" id="pico-messages">
+      <div class="pico-msg bot">👋 Hi there! How can we help you today?</div>
+    </div>
+    <div class="pico-chips" id="pico-chips">
+      <button class="pico-chip" onclick="picoQuick('Track my order')">Track my order</button>
+      <button class="pico-chip" onclick="picoQuick('Product questions')">Product questions</button>
+      <button class="pico-chip" onclick="picoQuick('Refund policy')">Refund policy</button>
+    </div>
+    <div class="pico-input-row">
+      <input type="text" class="pico-input" id="pico-input" placeholder="Type a message…" onkeydown="if(event.key==='Enter') picoSend()" />
+      <button class="pico-send" onclick="picoSend()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <button class="pico-btn" onclick="toggleChat()" aria-label="Chat with support">
+    <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+// ── CART SYSTEM ──
+const CART_KEY = 'quorbz_cart';
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+  catch { return []; }
+}
+function saveCart(cart) { localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateCartBadge(); }
+
+function addToCart(product, variant) {
+  const cart = getCart();
+  const existing = cart.find(i => i.id === product.id && i.variant === variant);
+  if (existing) {
+    existing.qty = Math.min(existing.qty + 1, 5);
+  } else {
+    cart.push({ id: product.id, title: product.title, category: product.category, emoji: product.emoji, price: midPrice(product.priceRange), priceRange: product.priceRange, variant, qty: 1 });
+  }
+  saveCart(cart);
+}
+
+function removeFromCart(id, variant) {
+  let cart = getCart().filter(i => !(i.id === id && i.variant === variant));
+  saveCart(cart);
+  renderCartDrawer();
+}
+
+function getCartCount() { return getCart().reduce((s, i) => s + i.qty, 0); }
+
+function midPrice(pr) {
+  if (!pr) return 0;
+  const nums = pr.replace(/\$/g, '').split('-').map(Number);
+  if (nums.length === 1) return nums[0];
+  return (nums[0] + nums[1]) / 2;
+}
+
+function getCartTotal() { return getCart().reduce((s, i) => s + i.price * i.qty, 0); }
+
+function updateCartBadge() {
+  const count = getCartCount();
+  const badge = document.getElementById('cart-badge');
+  if (!badge) return;
+  if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.classList.add('visible'); }
+  else badge.classList.remove('visible');
+}
+
+function renderCartDrawer() {
+  const cart = getCart();
+  const itemsEl = document.getElementById('cart-items');
+  const footerEl = document.getElementById('cart-footer');
+  const totalsEl = document.getElementById('cart-totals');
+  if (!itemsEl) return;
+  if (cart.length === 0) {
+    itemsEl.innerHTML = `<div class="cart-empty"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><p>Your cart is empty</p></div>`;
+    if (footerEl) footerEl.style.display = 'none';
+    return;
+  }
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-emoji">${item.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-title">${item.title}</div>
+        <div class="cart-item-meta">${item.variant} · qty ${item.qty}</div>
+      </div>
+      <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+      <button class="cart-item-remove" onclick="removeFromCart(${item.id}, '${item.variant}')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>`).join('');
+  const total = getCartTotal();
+  if (totalsEl) totalsEl.innerHTML = `
+    <div class="cart-total-row"><span>Subtotal (${getCartCount()} items)</span><span>$${total.toFixed(2)}</span></div>
+    <div class="cart-total-row"><span>Digital Delivery</span><span style="color:#4ade80">FREE</span></div>
+    <div class="cart-total-row grand"><span>Total</span><span>$${total.toFixed(2)}</span></div>`;
+  if (footerEl) footerEl.style.display = 'flex';
+}
+
+function openCart() {
+  renderCartDrawer();
+  document.getElementById('cart-overlay').classList.add('open');
+  document.getElementById('cart-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cart-overlay').classList.remove('open');
+  document.getElementById('cart-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── PICO CHAT ──
+let picoOpen = false;
+function toggleChat() { picoOpen = !picoOpen; document.getElementById('pico-panel').classList.toggle('open', picoOpen); }
+function picoQuick(text) { addPicoMsg(text, 'user'); setTimeout(() => addPicoMsg(getBotReply(text), 'bot'), 600); }
+function picoSend() {
+  const input = document.getElementById('pico-input');
+  const text = input.value.trim();
+  if (!text) return;
+  addPicoMsg(text, 'user'); input.value = '';
+  setTimeout(() => addPicoMsg(getBotReply(text), 'bot'), 600);
+}
+function addPicoMsg(text, type) {
+  const msgs = document.getElementById('pico-messages');
+  const div = document.createElement('div');
+  div.className = `pico-msg ${type}`;
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  if (type === 'bot') document.getElementById('pico-chips').style.display = 'none';
+}
+function getBotReply(text) {
+  const t = text.toLowerCase();
+  if (t.includes('track') || t.includes('order')) return 'You can track your order by checking the confirmation email we sent you. Your download links will be there!';
+  if (t.includes('refund') || t.includes('return')) return 'We offer refunds within 7 days if you\'re not satisfied. Email hello@quorbz.com with your order number.';
+  if (t.includes('product') || t.includes('format') || t.includes('file')) return 'All products are instant digital downloads in PDF, PNG, or compatible formats. No physical items shipped.';
+  return 'Thanks for reaching out! We\'ll get back to you within 24 hours at hello@quorbz.com — or check our FAQ for instant answers.';
+}
+
+// ── PRODUCT PAGE LOGIC ──
+let selectedVariant = 'print';
+let selectedQty = 1;
+
+function thumbBg(category) {
+  if (typeof CATEGORY_COLORS !== 'undefined' && CATEGORY_COLORS[category]) return CATEGORY_COLORS[category];
+  return 'linear-gradient(135deg, #1e3a5f, #0f172a)';
+}
+
+function getCompBadge(comp) {
+  if (!comp) return '';
+  const cls = { Low: 'badge-low', Medium: 'badge-med', High: 'badge-high' };
+  const label = comp === 'Medium' ? 'Med' : comp;
+  return `<span class="badge ${cls[comp] || 'badge-med'}">${label} Competition</span>`;
+}
+
+function selectVariant(v) {
+  selectedVariant = v;
+  document.querySelectorAll('.variant-pill').forEach(el => {
+    el.classList.toggle('selected', el.dataset.variant === v);
+  });
+}
+
+function updateQty(delta) {
+  selectedQty = Math.max(1, Math.min(5, selectedQty + delta));
+  document.getElementById('qty-val').textContent = selectedQty;
+  document.getElementById('qty-minus').disabled = selectedQty <= 1;
+  document.getElementById('qty-plus').disabled = selectedQty >= 5;
+}
+
+function handleAddToCart() {
+  addToCart(window._product, selectedVariant);
+  // add extra qty if > 1
+  for (let i = 1; i < selectedQty; i++) addToCart(window._product, selectedVariant);
+  const btn = document.getElementById('atc-main');
+  btn.textContent = '✓ Added to Cart!';
+  btn.classList.add('added');
+  setTimeout(() => { btn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg> Add to Cart'; btn.classList.remove('added'); }, 1800);
+  openCart();
+}
+
+function renderProduct(p) {
+  window._product = p;
+  document.title = `${p.title} — Quorbz`;
+
+  // Breadcrumb
+  document.getElementById('bc-category').textContent = p.category;
+  document.getElementById('bc-title').textContent = p.title;
+
+  const included = p.included || ['Instant PDF download', 'Print-ready format', 'Screen-optimized version', 'Personal use license'];
+  const platforms = p.platforms || ['Etsy', 'Gumroad'];
+  const tags = p.tags || [];
+
+  document.getElementById('product-wrap').innerHTML = `
+    <!-- MOCKUP -->
+    <div class="mockup-area">
+      <div class="mockup-card" style="background:${thumbBg(p.category)}">
+        <div class="mockup-emoji">${p.emoji}</div>
+        <div class="mockup-category">${p.category}</div>
+        <div class="mockup-title">${p.title}</div>
+        <div class="mockup-badge">Instant Download</div>
+      </div>
+    </div>
+
+    <!-- DETAILS -->
+    <div class="product-details">
+      <div class="detail-badges">
+        ${p.quickWin ? '<span class="badge badge-qw">⭐ Quick Win</span>' : ''}
+        ${getCompBadge(p.competition)}
+        ${platforms.map(pl => `<span class="badge-platform">${pl}</span>`).join('')}
+      </div>
+
+      <h1 class="detail-title">${p.title}</h1>
+      <p class="detail-desc">${p.shortDescription || p.description || 'A premium digital download designed to make your life easier.'}</p>
+      <div class="detail-price">${p.priceRange}</div>
+
+      <hr class="section-divider" />
+
+      <!-- INCLUDED -->
+      <div class="included-section">
+        <div class="included-title">What's Included</div>
+        <ul class="checklist">
+          ${included.map(item => `
+            <li>
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              ${item}
+            </li>`).join('')}
+        </ul>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- VARIANTS -->
+      <div class="variants-section">
+        <div class="variants-title">Format</div>
+        <div class="variant-pills">
+          <button class="variant-pill selected" data-variant="print" onclick="selectVariant('print')">🖨️ Print Edition</button>
+          <button class="variant-pill" data-variant="screen-light" onclick="selectVariant('screen-light')">☀️ Screen Light</button>
+          <button class="variant-pill" data-variant="screen-dark" onclick="selectVariant('screen-dark')">🌙 Screen Dark</button>
+        </div>
+      </div>
+
+      <!-- QTY -->
+      <div class="qty-section">
+        <div class="qty-title">Quantity</div>
+        <div class="qty-stepper">
+          <button class="qty-btn" id="qty-minus" onclick="updateQty(-1)" disabled>−</button>
+          <span class="qty-display" id="qty-val">1</span>
+          <button class="qty-btn" id="qty-plus" onclick="updateQty(1)">+</button>
+        </div>
+      </div>
+
+      <!-- ATC -->
+      <button class="atc-btn" id="atc-main" onclick="handleAddToCart()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        Add to Cart
+      </button>
+    </div>
+  `;
+
+  // BELOW FOLD
+  const relatedRaw = (typeof PRODUCTS !== 'undefined' ? PRODUCTS : [])
+    .filter(x => x.category === p.category && x.id !== p.id);
+  const related = relatedRaw.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  document.getElementById('below-fold').innerHTML = `
+    <hr class="section-divider" />
+
+    <!-- FULL DESCRIPTION -->
+    <div class="section-block">
+      <div class="section-heading">About This Product</div>
+      <p class="full-desc">${p.description || p.shortDescription || 'A beautifully designed digital product ready for instant download. Compatible with all major platforms and optimized for both print and screen use.'}</p>
+    </div>
+
+    ${p.etsyTitle ? `
+    <!-- LISTING INFO -->
+    <div class="section-block">
+      <div class="section-heading">Listing Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Etsy Listing Title</div>
+          <div class="info-value">${p.etsyTitle}</div>
+        </div>
+        ${p.targetCustomer ? `<div class="info-item"><div class="info-label">Target Customer</div><div class="info-value">${p.targetCustomer}</div></div>` : ''}
+        ${p.seoKeyword ? `<div class="info-item"><div class="info-label">Primary SEO Keyword</div><div class="info-value">${p.seoKeyword}</div></div>` : ''}
+        ${p.searchVolume ? `<div class="info-item"><div class="info-label">Monthly Search Volume</div><div class="info-value">${p.searchVolume}</div></div>` : ''}
+      </div>
+    </div>
+    ` : ''}
+
+    ${tags.length > 0 ? `
+    <!-- TAGS -->
+    <div class="section-block">
+      <div class="section-heading">Tags</div>
+      <div class="tags-list">${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+    ` : ''}
+
+    ${related.length > 0 ? `
+    <!-- RELATED -->
+    <div class="section-block">
+      <div class="section-heading">More in ${p.category}</div>
+      <div class="related-grid">
+        ${related.map(r => `
+          <a href="/shop/product.html?id=${r.id}" class="rel-card">
+            <div class="rel-thumb" style="background:${thumbBg(r.category)}">${r.emoji}</div>
+            <div class="rel-body">
+              <div class="rel-title">${r.title}</div>
+              <div class="rel-price">${r.priceRange}</div>
+            </div>
+          </a>`).join('')}
+      </div>
+    </div>
+    ` : ''}
+  `;
+}
+
+// ── INIT ──
+function init() {
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get('id'), 10);
+  if (isNaN(id) || typeof PRODUCTS === 'undefined') {
+    document.getElementById('product-wrap').innerHTML = `<div style="padding:80px 24px;text-align:center;color:var(--text-muted);grid-column:1/-1"><p>Product not found.</p><a href="/shop/" style="color:var(--accent-light)">← Back to shop</a></div>`;
+    return;
+  }
+  const product = PRODUCTS.find(p => p.id === id);
+  if (!product) {
+    document.getElementById('product-wrap').innerHTML = `<div style="padding:80px 24px;text-align:center;color:var(--text-muted);grid-column:1/-1"><p>Product not found.</p><a href="/shop/" style="color:var(--accent-light)">← Back to shop</a></div>`;
+    return;
+  }
+  renderProduct(product);
+  updateCartBadge();
+}
+
+init();
+</script>
+</body>
+</html>
