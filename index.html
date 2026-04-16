@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quorbz — AI-Native Digital Company</title>
+<meta name="description" content="Quorbz is an AI-native company building digital products, SaaS tools, and platforms for creators, entrepreneurs, and families.">
+<meta property="og:title" content="Quorbz — AI-Native Digital Company">
+<meta property="og:description" content="Digital products, SaaS tools, and platforms built by autonomous AI — designed for creators, entrepreneurs, and families.">
+<meta property="og:type" content="website">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --accent-dark: #1d4ed8;
+  --purple: #8b5cf6;
+  --bg: #060a14;
+  --surface: #0b1120;
+  --elevated: #111827;
+  --border: rgba(255,255,255,0.06);
+  --border-accent: rgba(59,130,246,0.25);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* GRID BG */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(59,130,246,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 68px; padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(6,10,20,.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: background .3s;
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: inherit;
+}
+.nav-logo-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 18px; color: #fff;
+  box-shadow: 0 0 20px rgba(59,130,246,.4);
+  flex-shrink: 0;
+}
+.nav-brand { font-weight: 800; font-size: 17px; letter-spacing: -.02em; }
+
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a {
+  font-size: 14px; font-weight: 500; color: var(--text-secondary);
+  text-decoration: none; transition: color .15s;
+}
+.nav-links a:hover { color: var(--text-primary); }
+
+.nav-cta {
+  padding: 9px 20px; border-radius: 9px; font-size: 13px; font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff !important; border: 1px solid rgba(59,130,246,.4);
+  box-shadow: 0 0 20px rgba(59,130,246,.3);
+  transition: box-shadow .15s !important;
+}
+.nav-cta:hover { box-shadow: 0 0 32px rgba(59,130,246,.5) !important; color: #fff !important; }
+
+/* HERO */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 120px 24px 80px;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute; top: -10vh; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 700px; pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(59,130,246,.13) 0%, rgba(139,92,246,.06) 40%, transparent 70%);
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 16px; border-radius: 100px;
+  background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.25);
+  font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--accent-light); margin-bottom: 32px;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent-light);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.8); }
+}
+
+.hero-title {
+  font-size: clamp(42px, 7vw, 88px);
+  font-weight: 900; line-height: 1.0; letter-spacing: -.04em;
+  margin-bottom: 28px; max-width: 900px;
+}
+.hero-title .gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2vw, 20px); color: var(--text-secondary);
+  max-width: 580px; line-height: 1.65; margin-bottom: 48px;
+}
+
+.hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.btn-primary {
+  padding: 16px 32px; border-radius: 12px; font-size: 16px; font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff;
+  border: 1px solid rgba(59,130,246,.4); box-shadow: 0 0 32px rgba(59,130,246,.4);
+  cursor: pointer; text-decoration: none;
+  transition: box-shadow .15s, transform .1s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { box-shadow: 0 0 48px rgba(59,130,246,.6); }
+.btn-primary:active { transform: scale(.98); }
+
+.btn-secondary {
+  padding: 15px 28px; border-radius: 12px; font-size: 15px; font-weight: 600;
+  background: rgba(255,255,255,.05); color: var(--text-primary);
+  border: 1px solid rgba(255,255,255,.1);
+  cursor: pointer; text-decoration: none;
+  transition: background .15s, border-color .15s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-secondary:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.15); }
+
+.hero-stats {
+  display: flex; align-items: center; gap: 40px;
+  margin-top: 72px; flex-wrap: wrap; justify-content: center;
+}
+.hero-stat { text-align: center; }
+.hero-stat-num { font-size: 28px; font-weight: 900; letter-spacing: -.03em; color: var(--text-primary); }
+.hero-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.hero-stat-divider { width: 1px; height: 36px; background: var(--border); }
+
+/* SECTION SHARED */
+section { position: relative; z-index: 1; }
+
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent-light); margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 48px); font-weight: 900;
+  letter-spacing: -.03em; line-height: 1.1; margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 17px; color: var(--text-secondary); line-height: 1.65; max-width: 600px;
+}
+
+/* WHAT IS QUORBZ */
+.about {
+  padding: 120px 24px;
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+
+.about-visual {
+  position: relative; display: flex; align-items: center; justify-content: center;
+}
+
+.about-orb {
+  width: 280px; height: 280px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(59,130,246,.4), rgba(139,92,246,.3) 50%, rgba(6,10,20,.9));
+  border: 1px solid rgba(59,130,246,.2);
+  box-shadow: 0 0 80px rgba(59,130,246,.15), inset 0 0 60px rgba(139,92,246,.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+}
+.about-orb-q {
+  font-size: 72px; font-weight: 900; letter-spacing: -.05em;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.about-orb-sub { font-size: 12px; color: var(--text-muted); letter-spacing: .08em; text-transform: uppercase; }
+
+.orbit-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(59,130,246,.1);
+  animation: spin-slow 20s linear infinite;
+}
+.orbit-ring.r1 { width: 340px; height: 340px; animation-duration: 24s; }
+.orbit-ring.r2 { width: 420px; height: 420px; animation-duration: 36s; animation-direction: reverse; }
+
+.orbit-dot {
+  position: absolute; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 12px var(--accent);
+}
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+
+.about-content .section-sub { margin-bottom: 32px; }
+
+.about-pillars { display: flex; flex-direction: column; gap: 16px; }
+.about-pillar {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 20px; border-radius: 12px;
+  background: rgba(255,255,255,.03); border: 1px solid var(--border);
+}
+.about-pillar-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.about-pillar-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+.about-pillar-desc { font-size: 13px; color: var(--text-muted); line-height: 1.45; }
+
+/* VENTURES */
+.ventures-section {
+  padding: 120px 24px;
+  background: linear-gradient(180deg, transparent, rgba(11,17,32,.8) 20%, rgba(11,17,32,.8) 80%, transparent);
+}
+.ventures-inner { max-width: 1100px; margin: 0 auto; }
+.ventures-header { text-align: center; margin-bottom: 64px; }
+.ventures-header .section-sub { margin: 0 auto; }
+
+.ventures-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+
+.venture-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 32px;
+  position: relative; overflow: hidden;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.venture-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+}
+.venture-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  opacity: 0; transition: opacity .2s;
+}
+.venture-card:hover::before { opacity: 1; }
+
+.vc1::before { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+.vc2::before { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+.vc3::before { background: linear-gradient(90deg, #10b981, #3b82f6); }
+.vc4::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+
+.venture-num {
+  font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 20px;
+}
+.venture-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin-bottom: 20px;
+}
+.vc1 .venture-icon { background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.2); }
+.vc2 .venture-icon { background: rgba(139,92,246,.12); border: 1px solid rgba(139,92,246,.2); }
+.vc3 .venture-icon { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.2); }
+.vc4 .venture-icon { background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.2); }
+
+.venture-name { font-size: 20px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 10px; }
+.venture-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+
+.venture-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.venture-tag {
+  padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+  color: var(--text-muted);
+}
+
+.venture-status {
+  position: absolute; top: 20px; right: 20px;
+  padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 700;
+}
+.status-live { background: rgba(16,185,129,.15); color: #34d399; border: 1px solid rgba(16,185,129,.25); }
+.status-building { background: rgba(59,130,246,.12); color: #60a5fa; border: 1px solid rgba(59,130,246,.2); }
+.status-y2 { background: rgba(255,255,255,.05); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* MISSION */
+.mission-section {
+  padding: 120px 24px;
+  max-width: 900px; margin: 0 auto; text-align: center;
+}
+
+.mission-section .section-title { margin-bottom: 24px; }
+.mission-section .section-sub { margin: 0 auto 48px; }
+
+.mission-quote {
+  position: relative; padding: 40px 48px;
+  background: var(--surface); border: 1px solid var(--border-accent);
+  border-radius: 20px; text-align: left;
+  box-shadow: 0 0 60px rgba(59,130,246,.06);
+}
+.mission-quote::before {
+  content: '"';
+  position: absolute; top: -12px; left: 40px;
+  font-size: 80px; line-height: 1; font-weight: 900;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.mission-quote-text {
+  font-size: 20px; line-height: 1.7; color: var(--text-secondary);
+  font-style: italic;
+}
+.mission-quote-text strong { color: var(--text-primary); font-style: normal; }
+
+/* WAITLIST */
+.waitlist-section {
+  padding: 120px 24px 160px;
+  background: linear-gradient(180deg, transparent, rgba(11,17,32,.6));
+}
+.waitlist-inner {
+  max-width: 560px; margin: 0 auto; text-align: center;
+}
+.waitlist-inner .section-title { margin-bottom: 16px; }
+.waitlist-inner .section-sub { margin: 0 auto 40px; }
+
+.waitlist-form {
+  display: flex; gap: 12px;
+}
+.waitlist-input {
+  flex: 1; padding: 15px 20px; border-radius: 12px; font-size: 15px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+  color: var(--text-primary); outline: none; font-family: inherit;
+  transition: border-color .2s, box-shadow .2s;
+}
+.waitlist-input:focus {
+  border-color: rgba(59,130,246,.5);
+  box-shadow: 0 0 0 4px rgba(59,130,246,.1);
+}
+.waitlist-input::placeholder { color: var(--text-muted); }
+.waitlist-btn {
+  padding: 15px 24px; border-radius: 12px; font-size: 15px; font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff;
+  border: 1px solid rgba(59,130,246,.4); box-shadow: 0 0 24px rgba(59,130,246,.3);
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: box-shadow .15s;
+}
+.waitlist-btn:hover { box-shadow: 0 0 40px rgba(59,130,246,.5); }
+
+.waitlist-note { font-size: 12px; color: var(--text-muted); margin-top: 16px; }
+
+.waitlist-success {
+  display: none; padding: 20px 24px; border-radius: 12px;
+  background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.2);
+  color: #34d399; font-size: 15px; font-weight: 600;
+}
+.waitlist-success.show { display: block; }
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 1;
+  padding: 48px; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 24px;
+}
+.footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.footer-logo-mark {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 14px; color: #fff;
+}
+.footer-brand { font-weight: 700; font-size: 14px; }
+.footer-tagline { font-size: 12px; color: var(--text-muted); }
+
+.footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color .15s; }
+.footer-links a:hover { color: var(--text-secondary); }
+
+.footer-copy { font-size: 12px; color: var(--text-muted); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+
+  .about {
+    grid-template-columns: 1fr; gap: 48px; padding: 80px 20px;
+  }
+  .about-visual { display: none; }
+
+  .ventures-grid { grid-template-columns: 1fr; }
+
+  .waitlist-form { flex-direction: column; }
+
+  footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+}
+
+@media (max-width: 480px) {
+  .hero-stats { gap: 24px; }
+  .hero-stat-divider { display: none; }
+  .mission-quote { padding: 28px 24px; }
+  .mission-quote-text { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">Q</div>
+    <div>
+      <div class="nav-brand">Quorbz</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#ventures">Ventures</a>
+    <a href="#mission">Mission</a>
+    <a href="#waitlist" class="nav-cta">Get Early Access</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    Building in Public — AI-Native from Day One
+  </div>
+
+  <h1 class="hero-title">
+    The company that<br>
+    <span class="gradient-text">runs itself.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Quorbz is an AI-native digital company. Autonomous agents research, build, market, and operate our products — with humans setting the direction and approving what ships.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#waitlist" class="btn-primary">Get Early Access →</a>
+    <a href="#ventures" class="btn-secondary">See Our Ventures ↓</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">4</div>
+      <div class="hero-stat-label">Planned Ventures</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-label">Autonomous Agents</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">1</div>
+      <div class="hero-stat-label">Human Founder</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">∞</div>
+      <div class="hero-stat-label">Scale Ceiling</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about">
+    <div class="about-visual">
+      <div class="orbit-ring r2"></div>
+      <div class="orbit-ring r1"></div>
+      <div class="about-orb">
+        <div class="about-orb-q">Q</div>
+        <div class="about-orb-sub">Quorbz LLC</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="section-label">↗ What is Quorbz</div>
+      <h2 class="section-title">A new kind of company.</h2>
+      <p class="section-sub" style="margin-bottom: 32px;">
+        We're building the blueprint for the next era of business — one where AI agents handle the operational work, and humans focus on vision, approval, and growth.
+      </p>
+      <div class="about-pillars">
+        <div class="about-pillar">
+          <div class="about-pillar-icon">🤖</div>
+          <div>
+            <div class="about-pillar-name">Fully Autonomous Operations</div>
+            <div class="about-pillar-desc">Six specialized AI agents handle product research, design, marketing, compliance, and publishing — 24 hours a day.</div>
+          </div>
+        </div>
+        <div class="about-pillar">
+          <div class="about-pillar-icon">🔒</div>
+          <div>
+            <div class="about-pillar-name">Zero Trust by Design</div>
+            <div class="about-pillar-desc">Every agent operates with minimum necessary permissions. Security isn't bolted on — it's the foundation every system is built on.</div>
+          </div>
+        </div>
+        <div class="about-pillar">
+          <div class="about-pillar-icon">⚡</div>
+          <div>
+            <div class="about-pillar-name">Human in the Loop</div>
+            <div class="about-pillar-desc">Nothing ships without founder approval. Agents execute — humans decide what the company stands for and where it goes next.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VENTURES -->
+<section id="ventures" class="ventures-section">
+  <div class="ventures-inner">
+    <div class="ventures-header">
+      <div class="section-label">↗ The Roadmap</div>
+      <h2 class="section-title">Four ventures. One machine.</h2>
+      <p class="section-sub">Each venture builds on the last — revenue funds the next team, and every team runs autonomously once proven.</p>
+    </div>
+
+    <div class="ventures-grid">
+
+      <div class="venture-card vc1">
+        <span class="venture-status status-live">● Launching Now</span>
+        <div class="venture-num">Venture One</div>
+        <div class="venture-icon">🛍️</div>
+        <div class="venture-name">Digital Products &amp; Print on Demand</div>
+        <p class="venture-desc">High-quality digital templates, planners, Canva bundles, resume packs, and wall art — designed for creators and sold on Etsy, Gumroad, and our own storefront. Subscriptions and product bundles scale best sellers.</p>
+        <div class="venture-tags">
+          <span class="venture-tag">Etsy</span>
+          <span class="venture-tag">Gumroad</span>
+          <span class="venture-tag">Templates</span>
+          <span class="venture-tag">Planners</span>
+          <span class="venture-tag">Wall Art</span>
+        </div>
+      </div>
+
+      <div class="venture-card vc2">
+        <span class="venture-status status-building">⬡ Building</span>
+        <div class="venture-num">Venture Two</div>
+        <div class="venture-icon">⚙️</div>
+        <div class="venture-name">Micro SaaS Tools</div>
+        <p class="venture-desc">Starting with the AI Content Repurposer — turn any YouTube video, blog post, or podcast into 30+ ready-to-post social pieces across every major platform. $29–$79/month. More tools to follow once the first product proves out.</p>
+        <div class="venture-tags">
+          <span class="venture-tag">AI Content</span>
+          <span class="venture-tag">Subscriptions</span>
+          <span class="venture-tag">$29–79/mo</span>
+          <span class="venture-tag">Creators</span>
+        </div>
+      </div>
+
+      <div class="venture-card vc3">
+        <span class="venture-status status-y2">Year 3</span>
+        <div class="venture-num">Venture Three</div>
+        <div class="venture-icon">🏡</div>
+        <div class="venture-name">Family Command Dashboard</div>
+        <p class="venture-desc">A privacy-first family hub — shared calendar, live location, smart lists, password health, smart home integrations, and custom widgets. The zero-trust alternative to Google and Amazon's household ecosystems.</p>
+        <div class="venture-tags">
+          <span class="venture-tag">Privacy-First</span>
+          <span class="venture-tag">Subscription</span>
+          <span class="venture-tag">Smart Home</span>
+          <span class="venture-tag">Families</span>
+        </div>
+      </div>
+
+      <div class="venture-card vc4">
+        <span class="venture-status status-y2">Year 4+</span>
+        <div class="venture-num">Venture Four</div>
+        <div class="venture-icon">🧱</div>
+        <div class="venture-name">Platform as a Service</div>
+        <p class="venture-desc">When our internal infrastructure is battle-tested across three ventures, we open it to the world. API access, white-label agent deployments, and developer tools for builders who want to run the same playbook at their own companies.</p>
+        <div class="venture-tags">
+          <span class="venture-tag">API</span>
+          <span class="venture-tag">White Label</span>
+          <span class="venture-tag">Dev Tools</span>
+          <span class="venture-tag">Builders</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section id="mission" class="mission-section">
+  <div class="section-label">↗ Why We Exist</div>
+  <h2 class="section-title">The mission.</h2>
+  <p class="section-sub">
+    We're not just building products. We're proving that a lean, AI-native company can compete at the level of teams ten times its size — and that a single founder, with the right systems, can build something that actually lasts.
+  </p>
+
+  <div class="mission-quote">
+    <p class="mission-quote-text">
+      The best businesses in the next decade won't be the ones with the most employees. They'll be the ones with the <strong>best systems, the sharpest agents, and a founder who knows when to say yes and when to say no.</strong> That's what we're building at Quorbz.
+    </p>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section id="waitlist" class="waitlist-section">
+  <div class="waitlist-inner">
+    <div class="section-label">↗ Early Access</div>
+    <h2 class="section-title">Get in early.</h2>
+    <p class="section-sub">
+      Be the first to know when products drop, when new tools go live, and when we open early access to the platform.
+    </p>
+
+    <form class="waitlist-form" id="waitlistForm" onsubmit="handleWaitlist(event)">
+      <input
+        class="waitlist-input"
+        type="email"
+        id="waitlistEmail"
+        placeholder="your@email.com"
+        required
+        autocomplete="email"
+      />
+      <button class="waitlist-btn" type="submit">Notify Me →</button>
+    </form>
+    <div class="waitlist-success" id="waitlistSuccess">
+      ✓ You're on the list. We'll be in touch.
+    </div>
+    <p class="waitlist-note">No spam. Unsubscribe any time. We hate junk email too.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a class="footer-logo" href="#">
+    <div class="footer-logo-mark">Q</div>
+    <div>
+      <div class="footer-brand">Quorbz LLC</div>
+      <div class="footer-tagline">AI-native from day one.</div>
+    </div>
+  </a>
+
+  <div class="footer-links">
+    <a href="#ventures">Ventures</a>
+    <a href="#mission">Mission</a>
+    <a href="#waitlist">Early Access</a>
+    <a href="mailto:hello@quorbz.com">Contact</a>
+  </div>
+
+  <div class="footer-copy">© 2026 Quorbz LLC. All rights reserved.</div>
+</footer>
+
+<script>
+function handleWaitlist(e) {
+  e.preventDefault();
+  const email = document.getElementById('waitlistEmail').value.trim();
+  if (!email) return;
+  document.getElementById('waitlistForm').style.display = 'none';
+  document.getElementById('waitlistSuccess').classList.add('show');
+}
+
+// Smooth active state for nav on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current
+      ? 'var(--text-primary)' : '';
+  });
+}, { passive: true });
+</script>
+
+</body>
+</html>
