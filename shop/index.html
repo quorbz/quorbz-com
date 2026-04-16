@@ -279,6 +279,8 @@
       cursor: pointer;
       -webkit-tap-highlight-color: rgba(59,130,246,0.15);
       touch-action: manipulation;
+      text-decoration: none;
+      color: inherit;
     }
     .product-card:hover {
       transform: translateY(-3px);
@@ -1055,7 +1057,7 @@ function getCompBadge(comp) {
 function renderFilters() {
   const bar = document.getElementById('filters-bar');
   bar.innerHTML = CATEGORIES.map(cat => `
-    <button class="cat-pill ${activeCategory === cat ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+    <button class="cat-pill ${activeCategory === cat ? 'active' : ''}" data-cat="${cat}">${cat}</button>
   `).join('');
 }
 
@@ -1107,9 +1109,8 @@ let currentPage = 1;
 let _allFiltered = [];
 
 function cardHTML(p) {
-  const c = (typeof CATEGORY_COLORS !== 'undefined' && CATEGORY_COLORS[p.category]) || '#3b82f6';
   const bg = thumbBg(p.category);
-  return `<div class="product-card" data-id="${p.id}" data-action="card">
+  return `<a href="/shop/product.html?id=${p.id}" class="product-card">
     <div class="card-thumb" style="background:${bg};">
       <span style="font-size:52px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">${p.emoji}</span>
       <div class="card-badges">
@@ -1124,9 +1125,8 @@ function cardHTML(p) {
     </div>
     <div class="card-actions">
       <button class="btn-primary" data-action="atc" data-id="${p.id}">Add to Cart</button>
-      <button class="btn-secondary" data-action="card" data-id="${p.id}">Details</button>
     </div>
-  </div>`;
+  </a>`;
 }
 
 function renderGrid(reset) {
@@ -1169,6 +1169,8 @@ function handleAddToCart(productId) {
 document.getElementById('product-grid').addEventListener('click', function(e) {
   const atcBtn = e.target.closest('[data-action="atc"]');
   if (atcBtn) {
+    e.preventDefault();
+    e.stopPropagation();
     handleAddToCart(parseInt(atcBtn.dataset.id));
     return;
   }
@@ -1178,19 +1180,23 @@ document.getElementById('product-grid').addEventListener('click', function(e) {
     renderGrid(false);
     return;
   }
-  const card = e.target.closest('[data-action="card"]');
-  if (card) {
-    window.location.href = '/shop/product.html?id=' + card.dataset.id;
-  }
 });
 // iOS Safari: touch delegation for instant response (no 300ms delay)
 document.getElementById('product-grid').addEventListener('touchend', function(e) {
   const atcBtn = e.target.closest('[data-action="atc"]');
-  if (atcBtn) { e.preventDefault(); handleAddToCart(parseInt(atcBtn.dataset.id)); return; }
+  if (atcBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    handleAddToCart(parseInt(atcBtn.dataset.id));
+    return;
+  }
   const loadMore = e.target.closest('[data-action="loadmore"]');
-  if (loadMore) { e.preventDefault(); currentPage++; renderGrid(false); return; }
-  const card = e.target.closest('[data-action="card"]');
-  if (card) { e.preventDefault(); window.location.href = '/shop/product.html?id=' + card.dataset.id; }
+  if (loadMore) {
+    e.preventDefault();
+    currentPage++;
+    renderGrid(false);
+    return;
+  }
 }, { passive: false });
 
 // ── SEARCH + SORT ──
@@ -1207,6 +1213,15 @@ document.getElementById('sort-select').addEventListener('change', (e) => {
   sortOrder = e.target.value;
   renderGrid(true);
 });
+
+document.getElementById('filters-bar').addEventListener('click', function(e) {
+  const pill = e.target.closest('[data-cat]');
+  if (pill) setCategory(pill.dataset.cat);
+});
+document.getElementById('filters-bar').addEventListener('touchend', function(e) {
+  const pill = e.target.closest('[data-cat]');
+  if (pill) { e.preventDefault(); setCategory(pill.dataset.cat); }
+}, { passive: false });
 
 function initProducts() {
   renderFilters();
@@ -1246,7 +1261,7 @@ function initProducts() {
 <!-- Slim products data (10KB, grid-only fields) -->
 <script src="/shop/products-slim.js?v=1"
   onload="initProducts()"
-  onerror="document.getElementById('product-grid').innerHTML='<div class=empty-state style=padding:40px;text-align:center;color:#64748b><p>Having trouble loading. Please refresh.</p></div>'">
+  onerror="initProducts()">
 </script>
 </body>
 </html>
