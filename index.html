@@ -576,7 +576,7 @@ footer {
       </div>
 
       <div class="venture-card vc3">
-        <span class="venture-status status-y2">Year 3</span>
+        <span class="venture-status status-y2">Coming Soon</span>
         <div class="venture-num">Venture Three</div>
         <div class="venture-icon">🏡</div>
         <div class="venture-name">Family Command Dashboard</div>
@@ -590,7 +590,7 @@ footer {
       </div>
 
       <div class="venture-card vc4">
-        <span class="venture-status status-y2">Year 4+</span>
+        <span class="venture-status status-y2">Coming Soon</span>
         <div class="venture-num">Venture Four</div>
         <div class="venture-icon">🧱</div>
         <div class="venture-name">Platform as a Service</div>
@@ -670,12 +670,30 @@ footer {
 </footer>
 
 <script>
-function handleWaitlist(e) {
+async function handleWaitlist(e) {
   e.preventDefault();
   const email = document.getElementById('waitlistEmail').value.trim();
   if (!email) return;
-  document.getElementById('waitlistForm').style.display = 'none';
-  document.getElementById('waitlistSuccess').classList.add('show');
+  const btn = document.querySelector('.waitlist-btn');
+  btn.textContent = 'Joining…';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    if (res.ok) {
+      document.getElementById('waitlistForm').style.display = 'none';
+      document.getElementById('waitlistSuccess').classList.add('show');
+    } else {
+      btn.textContent = 'Notify Me →';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Notify Me →';
+    btn.disabled = false;
+  }
 }
 
 // Smooth active state for nav on scroll
