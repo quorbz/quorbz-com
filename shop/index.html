@@ -283,13 +283,16 @@
     }
 
     .card-thumb {
-      height: 140px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 52px;
+      height: 160px;
       flex-shrink: 0;
       position: relative;
+      overflow: hidden;
+      border-radius: 12px 12px 0 0;
+    }
+    .card-thumb svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     .card-badges {
@@ -1030,7 +1033,7 @@ function getBotReply(text) {
 }
 
 // ── STORE LOGIC ──
-const CATEGORIES = ['All', 'Planners', 'Spreadsheets', 'Notion', 'Canva', 'Resumes', 'SVG Files', 'Wall Art', 'Invitations', 'Education', 'Wellness', 'AI Tools', '⭐ Quick Wins'];
+const CATEGORIES = ['All', 'Planners & Organizers', 'Google Sheets / Excel', 'Notion Templates', 'Canva Templates', 'Resume Templates', 'SVG Cut Files', 'Wall Art Printables', 'Invitations & Events', 'Educational Worksheets', 'Wellness & Lifestyle', 'AI & Digital Tools', '⭐ Quick Wins'];
 
 let activeCategory = 'All';
 let searchQuery = '';
@@ -1113,8 +1116,8 @@ function renderGrid() {
 
   grid.innerHTML = products.map(p => `
     <div class="product-card">
-      <div class="card-thumb" style="background:${thumbBg(p.category)}">
-        <span>${p.emoji}</span>
+      <div class="card-thumb" style="background:#f8fafc;overflow:hidden;">
+        ${generateMockupSVG(p)}
         <div class="card-badges">
           ${p.quickWin ? '<span class="badge badge-qw">Quick Win ⭐</span>' : ''}
           ${getCompBadge(p.competition)}

@@ -132,16 +132,16 @@
 
     .mockup-card {
       width: 100%;
-      aspect-ratio: 3/4;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      padding: 32px;
-      position: relative;
+      border-radius: 16px;
       overflow: hidden;
+      position: relative;
+      background: #f8fafc;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    }
+    .mockup-card svg {
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
     .mockup-card::before {
@@ -152,7 +152,7 @@
       pointer-events: none;
     }
 
-    .mockup-emoji { font-size: 96px; line-height: 1; }
+    .mockup-emoji { display: none; }
     .mockup-category {
       font-size: 12px;
       font-weight: 700;
@@ -803,11 +803,8 @@ function renderProduct(p) {
   document.getElementById('product-wrap').innerHTML = `
     <!-- MOCKUP -->
     <div class="mockup-area">
-      <div class="mockup-card" style="background:${thumbBg(p.category)}">
-        <div class="mockup-emoji">${p.emoji}</div>
-        <div class="mockup-category">${p.category}</div>
-        <div class="mockup-title">${p.title}</div>
-        <div class="mockup-badge">Instant Download</div>
+      <div class="mockup-card">
+        ${generateMockupSVG(p)}
       </div>
     </div>
 
