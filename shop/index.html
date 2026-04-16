@@ -203,6 +203,7 @@
       padding: 7px 16px;
       border-radius: 999px;
       font-size: 13px;
+      touch-action: manipulation;
       font-weight: 500;
       background: var(--elevated);
       border: 1px solid var(--border);
@@ -275,6 +276,9 @@
       transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
       display: flex;
       flex-direction: column;
+      cursor: pointer;
+      -webkit-tap-highlight-color: rgba(59,130,246,0.15);
+      touch-action: manipulation;
     }
     .product-card:hover {
       transform: translateY(-3px);
@@ -358,6 +362,7 @@
       background: var(--accent);
       color: #fff;
       border: none;
+      touch-action: manipulation;
       border-radius: 8px;
       padding: 9px 12px;
       font-size: 13px;
@@ -375,6 +380,7 @@
       color: var(--text-secondary);
       border: 1px solid var(--border);
       border-radius: 8px;
+      touch-action: manipulation;
       padding: 9px 12px;
       font-size: 13px;
       font-weight: 500;
@@ -1056,7 +1062,7 @@ function renderFilters() {
 function setCategory(cat) {
   activeCategory = cat;
   renderFilters();
-  renderGrid();
+  renderGrid(true);
 }
 
 function getFilteredProducts() {
@@ -1096,73 +1102,110 @@ function thumbBg(category) {
   return 'linear-gradient(135deg, #1e3a5f, #0f172a)';
 }
 
-function renderGrid() {
+const PAGE_SIZE = 12;
+let currentPage = 1;
+let _allFiltered = [];
+
+function cardHTML(p) {
+  const c = (typeof CATEGORY_COLORS !== 'undefined' && CATEGORY_COLORS[p.category]) || '#3b82f6';
+  const bg = thumbBg(p.category);
+  return `<div class="product-card" data-id="${p.id}" data-action="card">
+    <div class="card-thumb" style="background:${bg};">
+      <span style="font-size:52px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">${p.emoji}</span>
+      <div class="card-badges">
+        ${p.quickWin ? '<span class="badge badge-qw">Quick Win ⭐</span>' : ''}
+        ${getCompBadge(p.competition)}
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-category">${p.category}</div>
+      <div class="card-title">${p.title}</div>
+      <div class="card-price">${p.priceRange}</div>
+    </div>
+    <div class="card-actions">
+      <button class="btn-primary" data-action="atc" data-id="${p.id}">Add to Cart</button>
+      <button class="btn-secondary" data-action="card" data-id="${p.id}">Details</button>
+    </div>
+  </div>`;
+}
+
+function renderGrid(reset) {
+  if (reset !== false) currentPage = 1;
   const grid = document.getElementById('product-grid');
   const countEl = document.getElementById('result-count');
-  const products = getFilteredProducts();
+  _allFiltered = getFilteredProducts();
+  const total = _allFiltered.length;
 
-  countEl.textContent = `${products.length} product${products.length !== 1 ? 's' : ''}`;
+  countEl.textContent = `${total} product${total !== 1 ? 's' : ''}`;
 
-  if (products.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-        <p>No products match your search.</p>
-      </div>`;
+  if (total === 0) {
+    grid.innerHTML = `<div class="empty-state"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>No products match your search.</p></div>`;
     return;
   }
 
-  grid.innerHTML = products.map(p => `
-    <div class="product-card" onclick="window.location.href='/shop/product.html?id=${p.id}'" style="cursor:pointer;">
-      <div class="card-thumb" style="background:${thumbBg(p.category)};">
-        <span style="filter:drop-shadow(0 2px 8px rgba(0,0,0,0.18));pointer-events:none;">${p.emoji}</span>
-        <div class="card-badges">
-          ${p.quickWin ? '<span class="badge badge-qw">Quick Win ⭐</span>' : ''}
-          ${getCompBadge(p.competition)}
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-category">${p.category}</div>
-        <div class="card-title">${p.title}</div>
-        <div class="card-price">${p.priceRange}</div>
-      </div>
-      <div class="card-actions" onclick="event.stopPropagation()">
-        <button class="btn-primary" id="atc-${p.id}" onclick="handleAddToCart(${p.id})">Add to Cart</button>
-        <a href="/shop/product.html?id=${p.id}" class="btn-secondary">Details</a>
-      </div>
-    </div>
-  `).join('');
+  const page = _allFiltered.slice(0, currentPage * PAGE_SIZE);
+  const hasMore = total > page.length;
+
+  grid.innerHTML = page.map(cardHTML).join('') +
+    (hasMore ? `<div style="grid-column:1/-1;text-align:center;padding:24px 0;">
+      <button class="btn-secondary" id="load-more-btn" style="padding:12px 32px;font-size:14px;" data-action="loadmore">
+        Show more (${total - page.length} remaining)
+      </button></div>` : '');
 }
 
 function handleAddToCart(productId) {
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return;
   addToCart(product, 'print');
-  const btn = document.getElementById(`atc-${productId}`);
-  if (btn) {
-    btn.textContent = 'Added! ✓';
-    btn.classList.add('added');
-    setTimeout(() => {
-      btn.textContent = 'Add to Cart';
-      btn.classList.remove('added');
-    }, 1500);
-  }
   openCart();
+  // Visual feedback on all matching buttons
+  document.querySelectorAll(`[data-action="atc"][data-id="${productId}"]`).forEach(btn => {
+    btn.textContent = 'Added ✓';
+    setTimeout(() => { btn.textContent = 'Add to Cart'; }, 1500);
+  });
 }
 
-// Init
+// ── EVENT DELEGATION — single listener handles all grid interactions ──
+document.getElementById('product-grid').addEventListener('click', function(e) {
+  const atcBtn = e.target.closest('[data-action="atc"]');
+  if (atcBtn) {
+    handleAddToCart(parseInt(atcBtn.dataset.id));
+    return;
+  }
+  const loadMore = e.target.closest('[data-action="loadmore"]');
+  if (loadMore) {
+    currentPage++;
+    renderGrid(false);
+    return;
+  }
+  const card = e.target.closest('[data-action="card"]');
+  if (card) {
+    window.location.href = '/shop/product.html?id=' + card.dataset.id;
+  }
+});
+// iOS Safari: touch delegation for instant response (no 300ms delay)
+document.getElementById('product-grid').addEventListener('touchend', function(e) {
+  const atcBtn = e.target.closest('[data-action="atc"]');
+  if (atcBtn) { e.preventDefault(); handleAddToCart(parseInt(atcBtn.dataset.id)); return; }
+  const loadMore = e.target.closest('[data-action="loadmore"]');
+  if (loadMore) { e.preventDefault(); currentPage++; renderGrid(false); return; }
+  const card = e.target.closest('[data-action="card"]');
+  if (card) { e.preventDefault(); window.location.href = '/shop/product.html?id=' + card.dataset.id; }
+}, { passive: false });
+
+// ── SEARCH + SORT ──
 let _searchTimer;
 document.getElementById('search-input').addEventListener('input', (e) => {
   searchQuery = e.target.value;
   clearTimeout(_searchTimer);
-  _searchTimer = setTimeout(renderGrid, 150);
+  _searchTimer = setTimeout(() => renderGrid(true), 200);
 });
+// iOS: ensure input stays focusable after render
+document.getElementById('search-input').addEventListener('focus', () => {}, { passive: true });
 
 document.getElementById('sort-select').addEventListener('change', (e) => {
   sortOrder = e.target.value;
-  renderGrid();
+  renderGrid(true);
 });
 
 function initProducts() {
