@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Product — Quorbz Digital Products</title>
-  <script src="/shop/products-data.js?v=3"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -942,7 +941,8 @@ function init() {
   updateCartBadge();
 }
 
-init();
+// init() called by onload below
 </script>
+<script src="/shop/products-data.js?v=4" onload="init()"></script>
 </body>
 </html>

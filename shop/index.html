@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shop — Quorbz Digital Products</title>
   <meta name="description" content="Instant digital downloads. Printer-friendly. Made for real life. Shop planners, spreadsheets, Notion templates, Canva designs, and more." />
-  <script src="/shop/products-data.js?v=4"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1165,9 +1164,11 @@ document.getElementById('sort-select').addEventListener('change', (e) => {
   renderGrid();
 });
 
-renderFilters();
-renderGrid();
-updateCartBadge();
+function initProducts() {
+  renderFilters();
+  renderGrid();
+  updateCartBadge();
+}
 
 // ── SWIPE TO CLOSE CART ──
 (function() {
@@ -1196,6 +1197,12 @@ updateCartBadge();
     drawer.style.transform = '';
   }, { passive: true });
 })();
+</script>
+
+<!-- Products data — loaded last so HTML renders immediately on slow connections -->
+<script src="/shop/products-data.js?v=4"
+  onload="initProducts()"
+  onerror="document.getElementById('product-grid').innerHTML='<div class=empty-state style=padding:40px;text-align:center;color:#64748b><p>Having trouble loading products. Please refresh.</p></div>'">
 </script>
 </body>
 </html>
