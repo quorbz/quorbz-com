@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shop — Quorbz Digital Products</title>
   <meta name="description" content="Instant digital downloads. Printer-friendly. Made for real life. Shop planners, spreadsheets, Notion templates, Canva designs, and more." />
-  <script src="/shop/products-data.js?v=3"></script>
+  <script src="/shop/products-data.js?v=4"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -160,6 +160,7 @@
       max-width: 520px;
       margin: 0 auto;
       position: relative;
+      z-index: 10;
     }
 
     .search-wrap svg {
@@ -1116,7 +1117,7 @@ function renderGrid() {
   }
 
   grid.innerHTML = products.map(p => `
-    <div class="product-card">
+    <div class="product-card" onclick="window.location.href='/shop/product.html?id=${p.id}'" style="cursor:pointer;">
       <div class="card-thumb" style="background:#f8fafc;overflow:hidden;">
         ${generateMockupSVG(p)}
         <div class="card-badges">
@@ -1129,7 +1130,7 @@ function renderGrid() {
         <div class="card-title">${p.title}</div>
         <div class="card-price">${p.priceRange}</div>
       </div>
-      <div class="card-actions">
+      <div class="card-actions" onclick="event.stopPropagation()">
         <button class="btn-primary" id="atc-${p.id}" onclick="handleAddToCart(${p.id})">Add to Cart</button>
         <a href="/shop/product.html?id=${p.id}" class="btn-secondary">Details</a>
       </div>
@@ -1167,6 +1168,34 @@ document.getElementById('sort-select').addEventListener('change', (e) => {
 renderFilters();
 renderGrid();
 updateCartBadge();
+
+// ── SWIPE TO CLOSE CART ──
+(function() {
+  let startX = 0, startY = 0, dragging = false;
+  const drawer = document.getElementById('cart-drawer');
+  drawer.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dragging = true;
+  }, { passive: true });
+  drawer.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    const dx = e.touches[0].clientX - startX;
+    const dy = Math.abs(e.touches[0].clientY - startY);
+    if (dx > 0 && dx > dy) {
+      drawer.style.transform = `translateX(${Math.min(dx, 400)}px)`;
+    }
+  }, { passive: true });
+  drawer.addEventListener('touchend', e => {
+    if (!dragging) return;
+    dragging = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (dx > 80) {
+      closeCart();
+    }
+    drawer.style.transform = '';
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>
