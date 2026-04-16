@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quorbz — AI-Native Digital Company</title>
-<meta name="description" content="Quorbz is an AI-native company building digital products, SaaS tools, and platforms for creators, entrepreneurs, and families.">
-<meta property="og:title" content="Quorbz — AI-Native Digital Company">
-<meta property="og:description" content="Digital products, SaaS tools, and platforms built by autonomous AI — designed for creators, entrepreneurs, and families.">
+<title>Quorbz — Your Unfair Advantage</title>
+<meta name="description" content="The right tools change everything. Quorbz builds the tools, templates, and platforms that help ambitious people work smarter, earn more, and get ahead faster.">
+<meta property="og:title" content="Quorbz — Your Unfair Advantage">
+<meta property="og:description" content="The right tools change everything. We build them, test them, and put them in your hands — so you can focus on what actually moves the needle.">
 <meta property="og:type" content="website">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -380,6 +380,53 @@ section { position: relative; z-index: 1; }
 }
 .waitlist-success.show { display: block; }
 
+/* PICO CHATBOT */
+#pico-widget{position:fixed;bottom:28px;right:28px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif}
+#pico-panel{width:320px;background:rgba(8,16,30,.97);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 0 1px rgba(0,200,255,.08);display:none;flex-direction:column;transform-origin:bottom right}
+#pico-panel.pico-open{display:flex;animation:picoIn .28s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes picoIn{from{opacity:0;transform:scale(.85) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}
+#pico-ph{display:flex;align-items:center;gap:10px;padding:13px 15px;background:rgba(0,180,255,.07);border-bottom:1px solid rgba(255,255,255,.06)}
+.pico-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0f2840,#071520);border:1.5px solid rgba(0,200,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.pico-info{flex:1}
+.pico-info strong{display:block;color:#fff;font-size:13.5px;font-weight:600}
+.pico-info em{font-size:11px;font-style:normal;color:#00D4AA}
+.pico-dot{width:7px;height:7px;background:#00D4AA;border-radius:50%;box-shadow:0 0 6px #00D4AA;animation:picoPulse 2s ease-in-out infinite;flex-shrink:0}
+@keyframes picoPulse{0%,100%{opacity:1}50%{opacity:.3}}
+#pico-x{background:none;border:none;color:rgba(255,255,255,.35);font-size:19px;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s;line-height:1}
+#pico-x:hover{color:#fff;background:rgba(255,255,255,.1)}
+#pico-body{padding:14px;display:flex;flex-direction:column;gap:9px;min-height:110px;max-height:260px;overflow-y:auto}
+#pico-body::-webkit-scrollbar{width:4px}
+#pico-body::-webkit-scrollbar-track{background:transparent}
+#pico-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+.pico-msg-bot{max-width:86%;padding:9px 13px;border-radius:14px 14px 14px 4px;background:rgba(0,140,190,.14);border:1px solid rgba(0,200,255,.1);color:rgba(255,255,255,.88);font-size:13px;line-height:1.55}
+.pico-msg-user{max-width:86%;padding:9px 13px;border-radius:14px 14px 4px 14px;background:rgba(0,100,180,.22);border:1px solid rgba(0,180,255,.12);color:rgba(255,255,255,.9);font-size:13px;line-height:1.55;align-self:flex-end;margin-left:auto}
+.pico-typing{display:flex;gap:5px;padding:9px 13px;background:rgba(0,140,190,.1);border:1px solid rgba(0,200,255,.08);border-radius:14px 14px 14px 4px;width:fit-content}
+.pico-typing span{width:7px;height:7px;background:rgba(0,200,255,.5);border-radius:50%;animation:picoDot 1.1s ease-in-out infinite}
+.pico-typing span:nth-child(2){animation-delay:.2s}
+.pico-typing span:nth-child(3){animation-delay:.4s}
+@keyframes picoDot{0%,80%,100%{transform:scale(.55);opacity:.35}40%{transform:scale(1);opacity:1}}
+#pico-footer{display:flex;align-items:center;gap:8px;padding:10px 13px;border-top:1px solid rgba(255,255,255,.06)}
+#pico-inp{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 12px;color:#fff;font-size:13px;outline:none;transition:border-color .2s}
+#pico-inp:focus{border-color:rgba(0,200,255,.35)}
+#pico-inp::placeholder{color:rgba(255,255,255,.28)}
+#pico-send{width:35px;height:35px;background:linear-gradient(135deg,#0099cc,#0066aa);border:none;border-radius:9px;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .2s;flex-shrink:0}
+#pico-send:hover{background:linear-gradient(135deg,#00b8ee,#0077cc);transform:scale(1.06)}
+#pico-btn{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;position:relative}
+#pico-wrap{position:relative;width:72px;height:88px;animation:picoFloat 2.8s ease-in-out infinite}
+@keyframes picoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+#pico-wrap svg{width:72px;height:88px;filter:drop-shadow(0 8px 20px rgba(0,140,255,.45)) drop-shadow(0 2px 8px rgba(0,0,0,.55));transition:transform .2s}
+#pico-btn:hover #pico-wrap svg{transform:scale(1.1)}
+.pico-arm-r{transform-box:fill-box;transform-origin:top center;animation:picoWave 1.1s ease-in-out infinite}
+@keyframes picoWave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(-75deg)}}
+.pico-eye{transform-box:fill-box;transform-origin:center;animation:picoBlink 5s ease-in-out infinite}
+@keyframes picoBlink{0%,88%,100%{transform:scaleY(1)}92%{transform:scaleY(.08)}}
+.pico-ant-glow{animation:picoAntG 2.2s ease-in-out infinite}
+@keyframes picoAntG{0%,100%{opacity:.45;r:9}50%{opacity:.85;r:12}}
+#pico-lbl{background:rgba(8,16,30,.88);backdrop-filter:blur(8px);border:1px solid rgba(0,200,255,.2);color:rgba(255,255,255,.88);font-size:11px;font-weight:600;letter-spacing:.05em;padding:5px 11px;border-radius:20px;white-space:nowrap;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#pico-btn:hover #pico-lbl{opacity:1;transform:translateY(0)}
+#pico-notif{position:absolute;top:3px;right:3px;width:15px;height:15px;background:#FF4757;border-radius:50%;border:2px solid rgba(8,16,30,.95);font-size:8px;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;animation:picoNotifIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes picoNotifIn{from{transform:scale(0)}to{transform:scale(1)}}
+
 /* FOOTER */
 footer {
   position: relative; z-index: 1;
@@ -486,7 +533,7 @@ footer {
     <div class="hero-stat-divider"></div>
     <div class="hero-stat">
       <div class="hero-stat-num">∞</div>
-      <div class="hero-stat-label">Scale Ceiling</div>
+      <div class="hero-stat-label">No End in Sight</div>
     </div>
   </div>
 </section>
@@ -504,9 +551,9 @@ footer {
     </div>
     <div class="about-content">
       <div class="section-label">↗ What is Quorbz</div>
-      <h2 class="section-title">Built to compete at the highest level.</h2>
+      <h2 class="section-title">Your unfair advantage.</h2>
       <p class="section-sub" style="margin-bottom: 32px;">
-        Quorbz is a digital product company operating at a level most teams only dream about. We move fast, we ship quality, and we don't slow down.
+        The right tools change everything. We build them, test them, and put them in your hands — so you can focus on what actually moves the needle.
       </p>
       <div class="about-pillars">
         <div class="about-pillar">
@@ -568,7 +615,7 @@ footer {
         <div class="venture-tags">
           <span class="venture-tag">AI Content</span>
           <span class="venture-tag">Subscriptions</span>
-          <span class="venture-tag">$29–79/mo</span>
+          <span class="venture-tag">Early Access</span>
           <span class="venture-tag">Creators</span>
         </div>
       </div>
@@ -576,13 +623,13 @@ footer {
       <div class="venture-card vc3">
         <span class="venture-status status-y2">Coming Soon</span>
         <div class="venture-icon">🏡</div>
-        <div class="venture-name">Family Command Dashboard</div>
-        <p class="venture-desc">A privacy-first family hub — shared calendar, live location, smart lists, password health, smart home integrations, and custom widgets. Your family's data stays in your family. No ads. No tracking. No selling your life to the highest bidder.</p>
+        <div class="venture-name">LifeOps Dashboard</div>
+        <p class="venture-desc">Mission control for your personal life. Calendar, live location, smart lists, password health, smart home integrations, social media analytics, and custom widgets — all in one place. Your data stays yours. No ads. No tracking. No selling your life to the highest bidder.</p>
         <div class="venture-tags">
           <span class="venture-tag">Privacy-First</span>
           <span class="venture-tag">Subscription</span>
           <span class="venture-tag">Smart Home</span>
-          <span class="venture-tag">Families</span>
+          <span class="venture-tag">Social Analytics</span>
         </div>
       </div>
 
@@ -661,6 +708,74 @@ footer {
   <div class="footer-copy">© 2026 Quorbz LLC. All rights reserved.</div>
 </footer>
 
+<!-- PICO CHATBOT -->
+<div id="pico-widget">
+  <div id="pico-panel">
+    <div id="pico-ph">
+      <div class="pico-av" style="animation:picoPulse 2s ease-in-out infinite;">
+        <svg viewBox="0 0 36 36" width="26" height="26"><rect x="4" y="8" width="28" height="22" rx="7" fill="#0f2840"/><circle cx="13" cy="18" r="4" fill="#00C8FF" opacity=".9"/><circle cx="23" cy="18" r="4" fill="#00C8FF" opacity=".9"/><path d="M11 24 Q18 29 25 24" stroke="#00E8FF" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      </div>
+      <div class="pico-info"><strong>Pico</strong><em><span style="color:#00D4AA;animation:picoPulse 2s ease-in-out infinite;display:inline-block;">&#x25CF;</span> Online &mdash; here to help</em></div>
+      <div class="pico-dot"></div>
+      <button id="pico-x" onclick="picoToggle()">&#x2715;</button>
+    </div>
+    <div id="pico-body">
+      <div class="pico-msg-bot">Drop your email and you'll be the first to know when we launch. &#x1F680;</div>
+    </div>
+    <div id="pico-footer">
+      <input id="pico-inp" type="text" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')picoSend()"/>
+      <button id="pico-send" onclick="picoSend()">&#x27A4;</button>
+    </div>
+  </div>
+
+  <div id="pico-btn" onclick="picoToggle()">
+    <div id="pico-wrap">
+      <div id="pico-notif">1</div>
+      <svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pgH" x1="0%" y1="0%" x2="55%" y2="100%"><stop offset="0%" stop-color="#EBF3FA"/><stop offset="100%" stop-color="#A4BCCC"/></linearGradient>
+          <linearGradient id="pgB" x1="0%" y1="0%" x2="40%" y2="100%"><stop offset="0%" stop-color="#C4D6E4"/><stop offset="100%" stop-color="#84A0B2"/></linearGradient>
+          <linearGradient id="pgA" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B8CCDA"/><stop offset="100%" stop-color="#7696A8"/></linearGradient>
+          <radialGradient id="pgE" cx="36%" cy="30%" r="65%"><stop offset="0%" stop-color="#B0F0FF"/><stop offset="45%" stop-color="#00AADD"/><stop offset="100%" stop-color="#003E60"/></radialGradient>
+          <filter id="pgGE" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="pgGA" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <circle class="pico-ant-glow" cx="40" cy="8" r="9" fill="#FFB800" opacity=".4" filter="url(#pgGA)"/>
+        <rect x="37.5" y="10" width="5" height="15" rx="2.5" fill="#88A0B4"/>
+        <circle cx="40" cy="9" r="6.5" fill="#FFB800" filter="url(#pgGA)"/>
+        <circle cx="38" cy="6.5" r="2.2" fill="#FFE88A" opacity=".9"/>
+        <rect x="4" y="22" width="72" height="58" rx="16" fill="url(#pgH)"/>
+        <ellipse cx="29" cy="31" rx="19" ry="7" fill="white" opacity=".22"/>
+        <rect x="5" y="50" width="70" height="2" rx="1" fill="#90AABC" opacity=".35"/>
+        <circle cx="8" cy="51" r="3" fill="#6888A0"/><circle cx="72" cy="51" r="3" fill="#6888A0"/>
+        <circle cx="8" cy="51" r="1.2" fill="#96B4C4"/><circle cx="72" cy="51" r="1.2" fill="#96B4C4"/>
+        <rect x="12" y="28" width="56" height="46" rx="11" fill="#091624"/>
+        <circle cx="28" cy="46" r="10.5" fill="#0C1E30"/><circle cx="52" cy="46" r="10.5" fill="#0C1E30"/>
+        <circle class="pico-eye" cx="28" cy="46" r="7.5" fill="url(#pgE)" filter="url(#pgGE)"/>
+        <circle class="pico-eye" cx="52" cy="46" r="7.5" fill="url(#pgE)" filter="url(#pgGE)"/>
+        <circle cx="31" cy="42.5" r="2.6" fill="white" opacity=".88"/><circle cx="55" cy="42.5" r="2.6" fill="white" opacity=".88"/>
+        <circle cx="29.5" cy="43.5" r="1" fill="white" opacity=".5"/>
+        <path d="M 22 60 Q 40 71 58 60" stroke="#00DEFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="16" cy="32" r="3.5" fill="#527086"/><circle cx="16" cy="32" r="1.4" fill="#84AAC0"/>
+        <circle cx="64" cy="32" r="3.5" fill="#527086"/><circle cx="64" cy="32" r="1.4" fill="#84AAC0"/>
+        <circle cx="16" cy="70" r="3.5" fill="#527086"/><circle cx="16" cy="70" r="1.4" fill="#84AAC0"/>
+        <circle cx="64" cy="70" r="3.5" fill="#527086"/><circle cx="64" cy="70" r="1.4" fill="#84AAC0"/>
+        <rect x="22" y="80" width="36" height="18" rx="8" fill="url(#pgB)"/>
+        <rect x="37" y="80" width="6" height="18" rx="3" fill="white" opacity=".12"/>
+        <circle cx="26" cy="84" r="2.5" fill="#527086"/><circle cx="26" cy="84" r="1" fill="#84AAC0"/>
+        <circle cx="54" cy="84" r="2.5" fill="#527086"/><circle cx="54" cy="84" r="1" fill="#84AAC0"/>
+        <rect x="4" y="78" width="15" height="15" rx="7.5" fill="url(#pgA)"/>
+        <g class="pico-arm-r">
+          <rect x="61" y="78" width="15" height="15" rx="7.5" fill="url(#pgA)"/>
+          <circle cx="68.5" cy="93" r="5.5" fill="#AABFCC"/>
+          <circle cx="68.5" cy="93" r="2" fill="#CCDDEA" opacity=".6"/>
+        </g>
+      </svg>
+    </div>
+    <div id="pico-lbl">Chat with Pico</div>
+  </div>
+</div>
+
 <script>
 async function handleWaitlist(e) {
   e.preventDefault();
@@ -687,6 +802,266 @@ async function handleWaitlist(e) {
     btn.disabled = false;
   }
 }
+
+// PICO CHATBOT
+(function(){
+  var panel=document.getElementById('pico-panel'),
+      notif=document.getElementById('pico-notif'),
+      inp=document.getElementById('pico-inp'),
+      body=document.getElementById('pico-body'),
+      open=false, done=false;
+
+  window.picoToggle=function(){
+    open=!open;
+    if(open){panel.classList.add('pico-open');if(notif)notif.remove();setTimeout(function(){inp&&inp.focus();},280);}
+    else{panel.classList.remove('pico-open');panel.style.display='none';}
+  };
+
+  function isEmail(s){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim());}
+
+  function addBot(text){
+    var t=document.createElement('div');t.className='pico-typing';t.innerHTML='<span></span><span></span><span></span>';body.appendChild(t);body.scrollTop=body.scrollHeight;
+    setTimeout(function(){t.remove();var r=document.createElement('div');r.className='pico-msg-bot';r.textContent=text;body.appendChild(r);body.scrollTop=body.scrollHeight;},1000);
+  }
+
+  window.picoSend=async function(){
+    if(done)return;
+    var val=inp.value.trim();if(!val)return;inp.value='';
+    var u=document.createElement('div');u.className='pico-msg-user';u.textContent=val;body.appendChild(u);body.scrollTop=body.scrollHeight;
+    if(isEmail(val)){
+      done=true;
+      try{await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:val,source:'pico'})});}catch(e){}
+      addBot("You're on the list \uD83D\uDE80 We'll reach out when we launch — you're a top priority.");
+      inp.placeholder="You're on the list!";inp.disabled=true;document.getElementById('pico-send').disabled=true;
+    } else {
+      addBot("We're still hard at work! Just drop your email and you'll be our top priority when we go live.");
+    }
+  };
+})();
+
+// ── LITTLE FRIENDS ──────────────────────────────────────────────
+(function(){
+if(!document.getElementById('qzEggCss')){
+  var s=document.createElement('style');s.id='qzEggCss';
+  s.textContent='@keyframes qzB{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}';
+  document.head.appendChild(s);
+}
+
+var GAPS=[15000,25000,20000,15000,22000,18000];
+var actIdx=0;
+function scheduleNext(delay){
+  setTimeout(function(){
+    if(document.hidden)return scheduleNext(delay);
+    var acts=[actTorque,actFlux,actRex];
+    acts[actIdx%3](function(){
+      actIdx++;
+      scheduleNext(GAPS[actIdx%GAPS.length]);
+    });
+  },delay);
+}
+scheduleNext(GAPS[0]);
+
+// Pick a random visible header: hero title + all section titles + ventures header
+function heroPos(){
+  var candidates=[
+    document.querySelector('.hero-title'),
+    document.querySelector('#about .section-title'),
+    document.querySelector('.ventures-header .section-title'),
+    document.querySelector('.venture-card:nth-child(1) .venture-name'),
+    document.querySelector('.venture-card:nth-child(2) .venture-name'),
+    document.querySelector('.mission-section .section-title'),
+    document.querySelector('.waitlist-inner .section-title')
+  ].filter(function(el){
+    if(!el)return false;
+    var r=el.getBoundingClientRect();
+    return r.width>0&&r.height>0;
+  });
+  var el=candidates[Math.floor(Math.random()*candidates.length)];
+  if(el){
+    var r=el.getBoundingClientRect();
+    return{
+      cx:Math.min(Math.max(r.left+r.width*.5,80),window.innerWidth-80),
+      cy:Math.min(Math.max(r.top+r.height*.5,80),window.innerHeight-120)
+    };
+  }
+  return{cx:window.innerWidth*.5,cy:window.innerHeight*.22};
+}
+
+function mkStage(){
+  var el=document.createElement('div');
+  el.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99998;overflow:hidden;';
+  document.body.appendChild(el);
+  return el;
+}
+
+function robot(accent){
+  return'<svg viewBox="0 0 40 54" width="40" height="54" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs><linearGradient id="qzRG" x1="0%" y1="0%" x2="60%" y2="100%">'
+    +'<stop offset="0%" stop-color="#EBF3FA"/><stop offset="100%" stop-color="#A4BCCC"/>'
+    +'</linearGradient></defs>'
+    +'<rect x="18" y="1" width="4" height="7" rx="2" fill="#88A0B4"/>'
+    +'<circle cx="20" cy="2" r="3.5" fill="'+accent+'"/>'
+    +'<circle cx="18.5" cy=".8" r="1.2" fill="white" opacity=".7"/>'
+    +'<rect x="2" y="7" width="36" height="26" rx="9" fill="url(#qzRG)"/>'
+    +'<ellipse cx="16" cy="13" rx="11" ry="4" fill="white" opacity=".18"/>'
+    +'<rect x="7" y="12" width="26" height="17" rx="6" fill="#091624"/>'
+    +'<circle cx="15" cy="20" r="4.5" fill="'+accent+'" opacity=".9"/>'
+    +'<circle cx="25" cy="20" r="4.5" fill="'+accent+'" opacity=".9"/>'
+    +'<circle cx="16.8" cy="18" r="1.5" fill="white" opacity=".9"/>'
+    +'<circle cx="26.8" cy="18" r="1.5" fill="white" opacity=".9"/>'
+    +'<path d="M13 26 Q20 30 27 26" stroke="'+accent+'" stroke-width="1.6" fill="none" stroke-linecap="round"/>'
+    +'<circle cx="6" cy="11" r="2" fill="#527086"/><circle cx="6" cy="11" r=".8" fill="#84AAC0"/>'
+    +'<circle cx="34" cy="11" r="2" fill="#527086"/><circle cx="34" cy="11" r=".8" fill="#84AAC0"/>'
+    +'<circle cx="6" cy="29" r="2" fill="#527086"/><circle cx="6" cy="29" r=".8" fill="#84AAC0"/>'
+    +'<circle cx="34" cy="29" r="2" fill="#527086"/><circle cx="34" cy="29" r=".8" fill="#84AAC0"/>'
+    +'<rect x="11" y="33" width="18" height="12" rx="5" fill="#B8CCDA"/>'
+    +'<circle cx="14" cy="37" r="2" fill="#527086"/><circle cx="14" cy="37" r=".8" fill="#84AAC0"/>'
+    +'<circle cx="26" cy="37" r="2" fill="#527086"/><circle cx="26" cy="37" r=".8" fill="#84AAC0"/>'
+    +'<rect x="13" y="45" width="6" height="8" rx="3" fill="#A0B8C8"/>'
+    +'<rect x="21" y="45" width="6" height="8" rx="3" fill="#A0B8C8"/>'
+    +'</svg>';
+}
+
+function mkChar(st,accent,sl,st_,fl){
+  var outer=document.createElement('div');
+  outer.style.cssText='position:absolute;width:40px;left:'+sl+'px;top:'+st_+'px;transition:left .7s ease,top .7s ease;'+(fl?'transform:scaleX(-1);':'');
+  var inner=document.createElement('div');
+  inner.style.cssText='animation:qzB .45s ease-in-out infinite;';
+  inner.innerHTML=robot(accent);
+  outer.appendChild(inner);
+  st.appendChild(outer);
+  return{o:outer,i:inner,fl:fl};
+}
+
+function moveTo(c,l,t,ms){
+  c.o.style.transition='left '+(ms||700)+'ms ease,top '+(ms||700)+'ms ease';
+  c.o.style.left=l+'px';c.o.style.top=t+'px';
+}
+
+function stopBob(c){c.i.style.animation='none';}
+function startBob(c){c.i.style.animation='qzB .45s ease-in-out infinite';}
+
+function mkTool(c,emoji){
+  var t=document.createElement('div');
+  t.style.cssText='position:absolute;font-size:26px;top:12px;'+(c.fl?'left:-26px;':'right:-26px;')+'transition:transform .18s;line-height:1;pointer-events:none;';
+  t.textContent=emoji;
+  c.o.appendChild(t);
+  return t;
+}
+
+function entryConf(hp){
+  var vw=window.innerWidth,vh=window.innerHeight;
+  var edges=['left','right','top','bottom'];
+  var edge=edges[Math.floor(Math.random()*edges.length)];
+  var sl,st_,ml,mt,el_,et,fl;
+  ml=hp.cx-20;mt=hp.cy-27;
+  switch(edge){
+    case'left':  sl=-55;st_=mt;el_=vw+55;et=mt;fl=false;break;
+    case'right': sl=vw+55;st_=mt;el_=-55;et=mt;fl=true;break;
+    case'top':   sl=ml;st_=-60;el_=ml;et=-60;fl=Math.random()>.5;break;
+    case'bottom':sl=ml;st_=vh+20;el_=ml;et=vh+20;fl=Math.random()>.5;break;
+  }
+  return{sl:sl,st:st_,ml:ml,mt:mt,el:el_,et:et,fl:fl};
+}
+
+function spawnParticles(st,cx,cy,count,cols){
+  var parts=[];
+  for(var i=0;i<count;i++){
+    var p=document.createElement('div');
+    var sz=6+Math.random()*8;
+    var angle=(i/count)*Math.PI*2+Math.random()*.5;
+    var dist=24+Math.random()*44;
+    var px=cx+Math.cos(angle)*8,py=cy+Math.sin(angle)*8;
+    var pxF=cx+Math.cos(angle)*dist,pyF=cy+Math.sin(angle)*dist;
+    p.style.cssText='position:absolute;width:'+sz+'px;height:'+(sz*.55+2)+'px;'
+      +'background:'+cols[i%cols.length]+'90;border:1.5px solid '+cols[i%cols.length]+';'
+      +'border-radius:2px;left:'+px+'px;top:'+py+'px;'
+      +'opacity:0;transition:opacity .25s,left .5s ease,top .45s ease;'
+      +'transform:rotate('+(Math.random()*80-40)+'deg);pointer-events:none;';
+    st.appendChild(p);
+    parts.push({el:p,fx:pxF,fy:pyF,sx:cx,sy:cy});
+    (function(el,fx,fy){setTimeout(function(){el.style.opacity='1';el.style.left=fx+'px';el.style.top=fy+'px';},30+i*20);})(p,pxF,pyF);
+  }
+  return parts;
+}
+
+function sweepParticles(parts,targetX){
+  parts.forEach(function(pp,idx){
+    setTimeout(function(){
+      pp.el.style.transition='left .55s ease,top .4s ease,opacity .4s';
+      pp.el.style.left=(targetX+idx*7*(targetX>pp.fx?1:-1))+'px';
+      pp.el.style.top=(pp.fy+30)+'px';
+    },idx*55);
+  });
+}
+
+function actTorque(done){
+  var st=mkStage(),hp=heroPos(),e=entryConf(hp);
+  var c=mkChar(st,'#FF9500',e.sl,e.st,e.fl);
+  var tk=mkTool(c,'🔧');
+  setTimeout(function(){moveTo(c,e.ml,e.mt);},50);
+  setTimeout(function(){
+    stopBob(c);
+    var turns=['-28deg','32deg','-22deg','28deg','-16deg','20deg','-8deg','4deg'];
+    turns.forEach(function(r,i){setTimeout(function(){tk.style.transform='rotate('+r+')';},i*150);});
+    var sparks=spawnParticles(st,e.ml+20,e.mt+10,5,['#FFD700','#FF9500','#FFF','#FFB800']);
+    setTimeout(function(){sparks.forEach(function(p){p.el.style.opacity='0';});},800);
+  },800);
+  setTimeout(function(){startBob(c);moveTo(c,e.el,e.et,600);},2500);
+  setTimeout(function(){st.remove();done();},3400);
+}
+
+function actFlux(done){
+  var st=mkStage(),hp=heroPos(),e=entryConf(hp);
+  var c=mkChar(st,'#A855F7',e.sl,e.st,e.fl);
+  var tk=mkTool(c,'🔨');
+  setTimeout(function(){moveTo(c,e.ml,e.mt);},50);
+  setTimeout(function(){
+    stopBob(c);
+    var shockwave=spawnParticles(st,e.ml+20,e.mt+20,8,['#A855F7','#C084FC','#E9D5FF','#7C3AED','#4C1D95']);
+    var h=0,iv=setInterval(function(){
+      tk.style.transform=h%2===0?'rotate(55deg) translateY(-7px)':'rotate(-5deg) translateY(0)';
+      if(++h>13)clearInterval(iv);
+    },155);
+    setTimeout(function(){shockwave.forEach(function(p){p.el.style.opacity='0';});},900);
+  },800);
+  setTimeout(function(){startBob(c);moveTo(c,e.el,e.et,600);},2700);
+  setTimeout(function(){st.remove();done();},3500);
+}
+
+function actRex(done){
+  var st=mkStage(),hp=heroPos(),e=entryConf(hp);
+  var c=mkChar(st,'#EF4444',e.sl,e.st,e.fl);
+  var tk=mkTool(c,'✂️');
+  setTimeout(function(){moveTo(c,e.ml,e.mt);},50);
+  setTimeout(function(){
+    stopBob(c);
+    ['rotate(22deg)','rotate(-16deg)','rotate(26deg)','rotate(-12deg)','rotate(28deg)','rotate(-6deg)'].forEach(function(r,i){
+      setTimeout(function(){tk.style.transform=r;},i*175);
+    });
+  },800);
+  setTimeout(function(){
+    tk.textContent='💥';tk.style.transform='scale(1.4)';
+    var mess=spawnParticles(st,e.ml+20,e.mt+20,10,['#FF6B6B','#FFD700','#4ECDC4','#FF9500','#A855F7','#34D399','#F472B6','#60A5FA','#FCD34D','#FB923C']);
+    setTimeout(function(){tk.style.transform='scale(1)';},200);
+    setTimeout(function(){
+      tk.textContent='\uD83E\uDDF9';tk.style.transform='rotate(0)';
+      sweepParticles(mess,e.fl?e.ml+80:e.ml-40);
+      setTimeout(function(){
+        startBob(c);moveTo(c,e.el,e.et,1300);
+        mess.forEach(function(pp){
+          pp.el.style.transition='left 1.3s ease,top 1.3s ease,opacity .6s';
+          pp.el.style.left=e.el+'px';pp.el.style.top=e.et+'px';
+          setTimeout(function(){pp.el.style.opacity='0';},500);
+        });
+      },2000);
+      setTimeout(function(){mess.forEach(function(pp){if(pp.el.parentNode)pp.el.remove();});st.remove();done();},4000);
+    },1400);
+  },1900);
+}
+
+})();
+// ────────────────────────────────────────────────────────────────
 
 // Smooth active state for nav on scroll
 const sections = document.querySelectorAll('section[id]');
